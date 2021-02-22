@@ -65,7 +65,7 @@ export function Lesson() {
       explanation.hide()
     } else {
       explanation
-        .fetch()
+        .fetch(word.id)
         .then(() => explanation.show())
     }
   }

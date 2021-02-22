@@ -6,11 +6,11 @@ export function useExplanation() {
   const [fetching, setFetching] = useState(false)
   const [visible, setVisible] = useState(false)
 
-  const fetch = () => {
+  const fetch = (wordId) => {
     setFetching(true)
 
     return ExplanationHttpApi
-      .get()
+      .get(wordId)
       .then(meanings => setMeanings(meanings))
       .then(() => setFetching(false))
   }
