@@ -1,15 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using English.WebApi.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
 {
     public class StatsController : ApiControllerBase
     {
-        public async Task<ActionResult> GetStats()
+        [HttpGet]
+        public async Task<ActionResult<StatsOuputModel>> GetStats()
         {
-            return Ok(
-                new { TotalLessons = 34 }
-                );
+            await Task.Yield();
+
+            var result = new StatsOuputModel
+            {
+                TotalLessons = 34
+            };
+
+            return Ok(result);
         }
     }
 }
