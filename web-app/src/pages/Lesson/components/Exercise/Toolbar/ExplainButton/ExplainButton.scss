@@ -1,0 +1,11 @@
+@import "scss/layout";
+
+.container {
+    position: relative;
+
+    .spinner {
+        position: absolute;
+        top: 0.25rem;
+        right: -1.5rem;
+    }
+}

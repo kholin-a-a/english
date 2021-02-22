@@ -1,0 +1,42 @@
+@import "scss/colors";
+
+.spinner {
+    border: 3px solid $green-sea;
+    border-radius: 50%;
+    border-top-color: transparent;
+    box-sizing: border-box;
+
+    animation-name: spin;
+    animation-duration: 700ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+
+    &.small {
+        width: 0.8rem;
+        height: 0.8rem;
+    }
+
+    &.medium {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    &.large {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    &.giant {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}

@@ -1,0 +1,34 @@
+@import "scss/colors";
+
+.text {
+    line-height: 1;
+
+    &.small {
+        font-size: 0.8rem;
+    }
+
+    &.medium {
+        font-size: 1rem;
+    }
+
+    &.large {
+        font-size: 1.5rem;
+    }
+
+    &.giant {
+        font-size: 2.5rem;
+    }
+
+    &.primary {
+        color: $clouds;
+    }
+
+    &.secondary {
+        color: $concrete;
+    }
+
+    &.italic {
+        color: $clouds;
+        font-style: italic;
+    }
+}

@@ -1,0 +1,12 @@
+@import "scss/layout";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score {
+    margin-top: 10 * $unit;
+    margin-bottom: 10 * $unit;
+}

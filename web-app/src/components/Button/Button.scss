@@ -1,0 +1,28 @@
+@import "scss/colors";
+@import "scss/layout";
+
+.button {
+    font-size: 1rem;
+    outline: none;
+    cursor: pointer;
+
+    &:disabled {
+        cursor: default;
+        opacity: 0.6;
+    }
+
+    &.action {
+        background: $green-sea;
+        color: $clouds;
+        border: none;
+        border-radius: $unit;
+        padding: $unit * 2 $unit * 4;
+    }
+
+    &.flat {
+        color: $green-sea;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+}

@@ -1,0 +1,8 @@
+@import "scss/layout";
+@import "scss/colors";
+
+.list {
+    padding-left: 4 * $unit;
+    margin: 1 * $unit 0;
+    color: $clouds;
+}

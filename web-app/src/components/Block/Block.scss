@@ -1,0 +1,11 @@
+@import "scss/colors.scss";
+@import "scss/layout.scss";
+
+.block {
+    background: $wet-asphalt;
+    padding: $unit * 4;
+}
+
+.rounded {
+    border-radius: $unit * 2;
+}
