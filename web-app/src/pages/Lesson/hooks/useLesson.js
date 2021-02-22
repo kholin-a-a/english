@@ -22,7 +22,7 @@ export function useLesson() {
     setFetching(true)
 
     return LessonHttpApi
-      .stop()
+      .stop(id)
       .then(() => setFetching(false))
   }
 

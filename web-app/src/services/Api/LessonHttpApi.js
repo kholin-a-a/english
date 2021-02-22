@@ -1,15 +1,11 @@
-import { delay } from "../../utils/delay";
+import { Http } from "../Http";
 
 export const LessonHttpApi = {
   start: () => {
-    return delay(500)
-      .then(() => ({
-        id: 16,
-        number: 456
-      }))
+    return Http.post("/lessons")
   },
 
-  stop: () => {
-    return delay(500)
+  stop: (id) => {
+    return Http.delete(`/lessons/${id}`)
   }
 }
