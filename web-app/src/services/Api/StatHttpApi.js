@@ -1,10 +1,7 @@
-import { delay } from "../../utils/delay";
+import { Http } from "../Http";
 
 export const StatHttpApi = {
   get: () => {
-    return delay(500)
-      .then(() => ({
-        totalLessons: 32
-      }))
+    return Http.get("/stats")
   }
 }
