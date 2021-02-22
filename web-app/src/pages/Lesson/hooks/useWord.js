@@ -22,21 +22,21 @@ export function useWord() {
     setFetching(true)
 
     return WordHttpApi
-      .unknown()
+      .unknown(id)
       .then(() => setFetching(false))
   }
 
-  const commit = (lessonId, text) => {
+  const complete = (lessonId, text) => {
     setFetching(true)
 
     const model = {
-      wordId: id,
+      id: id,
       lessonId,
       text
     }
 
     return WordHttpApi
-      .commit(model)
+      .complete(model)
       .then(() => setFetching(false))
   }
 
@@ -47,6 +47,6 @@ export function useWord() {
 
     next,
     unknown,
-    commit
+    complete
   }
 }

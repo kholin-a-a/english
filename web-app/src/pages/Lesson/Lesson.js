@@ -46,7 +46,7 @@ export function Lesson() {
       .stop()
       .then(() => explanation.hide())
       .then(() => listener.spoken())
-      .then((spoken) => word.commit(lesson.id, spoken))
+      .then((spoken) => word.complete(lesson.id, spoken))
       .then(() => word.next())
       .then(() => listener.start())
   }

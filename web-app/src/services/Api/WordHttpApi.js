@@ -1,25 +1,15 @@
-import { delay } from "../../utils/delay";
+import { Http } from "../Http";
 
 export const WordHttpApi = {
   next: () => {
-    return delay(500)
-      .then(() => ({
-        id: 123,
-        text: "example"
-      }))
+    return Http.get("/words")
   },
 
-  unknown: () => {
-    return delay(500)
+  unknown: (id) => {
+    return Http.post("/words/unknown", id)
   },
 
-  commit: (data) => {
-    const {
-      wordId,
-      lessonId,
-      text
-    } = data
-
-    return delay(500)
+  complete: (data) => {
+    return Http.post("/words/completed", data)
   }
 }
