@@ -49,10 +49,9 @@ export function Lesson() {
   useEffect(init, []);
 
   const onStopLessonHandler = () => {
-    listener.stop()
-
-    lesson
+    listener
       .stop()
+      .then(() => lesson.stop())
       .then(() => navigation.home())
   }
 
@@ -89,7 +88,7 @@ export function Lesson() {
     speaker.speak(word.text)
   }
 
-  const btnDisabled = lesson.fetching || word.fetching
+  const btnDisabled = lesson.fetching || listener.pending
 
   return (
     <div className={css.page}>
@@ -120,7 +119,7 @@ export function Lesson() {
         <Margin top={MarginSize.medium} />
 
         <Block rounded={true}>
-          <If condition={lesson.fetching || word.fetching}>
+          <If condition={lesson.fetching || word.fetching || listener.pending}>
             <WordPreloader />
 
             <Else>

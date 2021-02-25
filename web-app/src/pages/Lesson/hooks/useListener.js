@@ -3,6 +3,7 @@ import { SpeechRecognition } from "services/SpeechRecognition";
 
 export function useListener() {
   const [ recognition, setRecognition ] = useState(new SpeechRecognition())
+  const [ pending, setPending ] = useState(false)
 
   const start = () => {
     return new Promise(res => {
@@ -12,7 +13,11 @@ export function useListener() {
   }
 
   const stop = () => {
-    return recognition.stop()
+    setPending(true)
+
+    return recognition
+      .stop()
+      .then(() => setPending(false))
   }
 
   const spoken = () => {
@@ -22,6 +27,8 @@ export function useListener() {
   }
 
   return {
+    pending,
+
     start,
     stop,
     spoken
