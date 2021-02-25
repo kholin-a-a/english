@@ -5,3 +5,4 @@ export * from "./List";
 export * from "./Repeat";
 export * from "./Spinner";
 export * from "./Text";
+export * from "./FlexRow";
