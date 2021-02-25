@@ -20,4 +20,22 @@ $base: 4 * $unit;
       margin-top: 4 * $base;
     }
   }
+
+  &.bottom {
+    &-small {
+      margin-bottom: 1 * $base;
+    }
+    
+    &-medium {
+      margin-bottom: 2 * $base;
+    }
+  
+    &-large {
+      margin-bottom: 3 * $base;;
+    }
+  
+    &-giant {
+      margin-bottom: 4 * $base;
+    }
+  }
 }

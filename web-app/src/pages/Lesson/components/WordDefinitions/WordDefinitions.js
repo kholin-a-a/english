@@ -57,7 +57,7 @@ export function WordDefinitions(props) {
                         />
                       </div>
 
-                      <Margin top={MarginSize.small}>
+                      <Margin top={MarginSize.medium} bottom={MarginSize.medium}>
                         <Text
                           value={definition.example}
                           type={TextType.italic}
