@@ -1,21 +1,23 @@
 @import "scss/layout";
 
+$base: 4 * $unit;
+
 .margin {
   &.top {
     &-small {
-      margin-top: $unit;
+      margin-top: 1 * $base;
     }
     
     &-medium {
-      margin-top: 2 * $unit;
+      margin-top: 2 * $base;
     }
   
     &-large {
-      margin-top: 3 * $unit;
+      margin-top: 3 * $base;;
     }
   
     &-giant {
-      margin-top: 4 * $unit;
+      margin-top: 4 * $base;
     }
   }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "./Lesson.scss";
+import css from "./Lesson.scss";
 
 import { useAppNavigation } from "hooks";
 
@@ -8,16 +8,19 @@ import {
   FlexRow,
   Text,
   TextSize,
-  Button,
-  ButtonType,
+  FlatButton,
   If,
   Else,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
+  Margin,
+  MarginSize
 } from "components";
 
 import {
-  Exercise
+  Word,
+  WordPreloader,
+  Explanation
 } from "./components";
 
 import {
@@ -86,12 +89,11 @@ export function Lesson() {
     speaker.speak(word.text)
   }
 
+  const btnDisabled = lesson.fetching || word.fetching
+
   return (
-    <div className={styles.page}>
-
-      <div className={styles.content}>
-        <div className={styles.space}></div>
-
+    <div className={css.page}>
+      <div className={css.content}>
         <Block rounded={true}>
           <FlexRow>
             <If condition={lesson.fetching}>
@@ -105,26 +107,55 @@ export function Lesson() {
               </Else>
             </If>
 
-            <Button
+            <FlatButton
               value="Stop"
-              type={ButtonType.flat}
               disabled={lesson.fetching}
               onClick={onStopLessonHandler}
             />
           </FlexRow>
         </Block>
 
-        <div className={styles.space}></div>
+        <Margin top={MarginSize.medium} />
 
-        <Exercise
-          lesson={lesson}
-          word={word}
-          explanation={explanation}
-          onExplain={onExplainWordHandler}
-          onDontKnow={onUnknownWordHandler}
-          onNext={onNextWordHandler}
-          onSpeak={onSpeakHandler}
-        />
+        <Block rounded={true}>
+          <If condition={lesson.fetching || word.fetching}>
+            <WordPreloader />
+
+            <Else>
+              <Word text={word.text} onSpeak={onSpeakHandler} />
+            </Else>
+          </If>
+
+          <Margin top={MarginSize.large} />
+
+          <FlexRow>
+            <FlatButton
+              value="Explain"
+              onClick={onExplainWordHandler}
+              disabled={btnDisabled}
+            />
+
+            <FlatButton
+              value="I don't know"
+              onClick={onUnknownWordHandler}
+              disabled={btnDisabled}
+            />
+
+            <FlatButton
+              value="Next"
+              onClick={onNextWordHandler}
+              disabled={btnDisabled}
+            />
+          </FlexRow>
+
+          <If condition={explanation.visible}>
+            <Margin top={MarginSize.small}>
+              <Explanation
+                meanings={explanation.meanings}
+              />
+            </Margin>
+          </If>
+        </Block>
       </div>
     </div>
   )
