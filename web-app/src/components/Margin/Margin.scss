@@ -1,0 +1,21 @@
+@import "scss/layout";
+
+.margin {
+  &.top {
+    &-small {
+      margin-top: $unit;
+    }
+    
+    &-medium {
+      margin-top: 2 * $unit;
+    }
+  
+    &-large {
+      margin-top: 3 * $unit;
+    }
+  
+    &-giant {
+      margin-top: 4 * $unit;
+    }
+  }
+}
