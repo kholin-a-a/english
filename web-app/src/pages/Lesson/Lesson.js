@@ -4,7 +4,19 @@ import styles from "./Lesson.scss";
 import { useAppNavigation } from "hooks";
 
 import {
-  Toolbar,
+  Block,
+  FlexRow,
+  Text,
+  TextSize,
+  Button,
+  ButtonType,
+  If,
+  Else,
+  Spinner,
+  SpinnerSize
+} from "components";
+
+import {
   Exercise
 } from "./components";
 
@@ -80,10 +92,27 @@ export function Lesson() {
       <div className={styles.content}>
         <div className={styles.space}></div>
 
-        <Toolbar
-          lesson={lesson}
-          onStop={onStopLessonHandler}
-        />
+        <Block rounded={true}>
+          <FlexRow>
+            <If condition={lesson.fetching}>
+              <Spinner size={SpinnerSize.large} />
+
+              <Else>
+                <Text
+                  value={`Lesson ${lesson.number}`}
+                  size={TextSize.large}
+                />
+              </Else>
+            </If>
+
+            <Button
+              value="Stop"
+              type={ButtonType.flat}
+              disabled={lesson.fetching}
+              onClick={onStopLessonHandler}
+            />
+          </FlexRow>
+        </Block>
 
         <div className={styles.space}></div>
 
