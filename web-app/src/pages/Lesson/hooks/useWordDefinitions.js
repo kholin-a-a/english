@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { ExplanationHttpApi } from "services/Api";
+import { DefinitionHttpApi } from "services/Api";
 
-export function useExplanation() {
-  const [meanings, setMeanings] = useState([])
+export function useWordDefinitions() {
+  const [definitions, setDefinitions] = useState([])
   const [fetching, setFetching] = useState(false)
   const [visible, setVisible] = useState(false)
 
   const fetch = (wordId) => {
     setFetching(true)
 
-    return ExplanationHttpApi
+    return DefinitionHttpApi
       .get(wordId)
-      .then(meanings => setMeanings(meanings))
+      .then(definitions => setDefinitions(definitions))
       .then(() => setFetching(false))
   }
 
@@ -24,7 +24,7 @@ export function useExplanation() {
   }
 
   return {
-    meanings,
+    definitions,
     fetching,
     visible,
 

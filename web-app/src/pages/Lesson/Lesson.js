@@ -20,13 +20,13 @@ import {
 import {
   Word,
   WordPreloader,
-  Explanation
+  WordDefinitions
 } from "./components";
 
 import {
   useLesson,
   useWord,
-  useExplanation,
+  useWordDefinitions,
   useSpeaker,
   useListener
 } from "./hooks";
@@ -35,7 +35,7 @@ export function Lesson() {
   const navigation = useAppNavigation()
   const lesson = useLesson()
   const word = useWord()
-  const explanation = useExplanation()
+  const wordDefinitions = useWordDefinitions()
   const speaker = useSpeaker()
   const listener = useListener()
 
@@ -59,7 +59,7 @@ export function Lesson() {
   const onNextWordHandler = () => {
     listener
       .stop()
-      .then(() => explanation.hide())
+      .then(() => wordDefinitions.hide())
       .then(() => listener.spoken())
       .then((spoken) => word.complete(lesson.id, spoken))
       .then(() => word.next())
@@ -69,19 +69,19 @@ export function Lesson() {
   const onUnknownWordHandler = () => {
     listener
       .stop()
-      .then(() => explanation.hide())
+      .then(() => wordDefinitions.hide())
       .then(() => word.unknown())
       .then(() => word.next())
       .then(() => listener.start())
   }
 
   const onExplainWordHandler = () => {
-    if (explanation.visible) {
-      explanation.hide()
+    if (wordDefinitions.visible) {
+      wordDefinitions.hide()
     } else {
-      explanation
+      wordDefinitions
         .fetch(word.id)
-        .then(() => explanation.show())
+        .then(() => wordDefinitions.show())
     }
   }
 
@@ -148,10 +148,10 @@ export function Lesson() {
             />
           </FlexRow>
 
-          <If condition={explanation.visible}>
+          <If condition={wordDefinitions.visible}>
             <Margin top={MarginSize.small}>
-              <Explanation
-                meanings={explanation.meanings}
+              <WordDefinitions
+                definitions={wordDefinitions.definitions}
               />
             </Margin>
           </If>

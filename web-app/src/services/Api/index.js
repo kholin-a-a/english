@@ -1,4 +1,4 @@
 export * from "./LessonHttpApi";
 export * from "./WordHttpApi";
-export * from "./ExplanationHttpApi";
+export * from "./DefinitionHttpApi";
 export * from "./StatHttpApi";

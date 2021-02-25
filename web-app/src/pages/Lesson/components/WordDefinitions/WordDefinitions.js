@@ -10,41 +10,58 @@ import {
   MarginSize
 } from "components";
 
-export function Explanation(props) {
+import { groupBy } from "utils/ArrayUtils";
+
+export function WordDefinitions(props) {
   const {
-    meanings
+    definitions
   } = props;
+
+  const speechParts = Array.from(
+    groupBy(definitions, d => d.speechPart)
+  ).map(group => ({
+    speechPart: group[0],
+    definitions: group[1]
+  }))
 
   return (
     <div>
       <Repeat
-        items={meanings}
-        render={(item, index) => (
+        items={speechParts}
+        render={(part, index) => (
           <React.Fragment key={index}>
             <div>
-              <Text value={item.part} type={TextType.secondary} />
+              <Text
+                value={part.speechPart}
+                type={TextType.secondary}
+              />
             </div>
 
             <OrderedList>
               <Repeat
-                items={item.meanings}
-                render={(meaning, index) => (
+                items={part.definitions}
+                render={(definition, index) => (
                   <li key={index}>
                     <div>
                       <div>
-                        <Text value={meaning.meaning} />
+                        <Text
+                          value={definition.definition}
+                        />
                       </div>
 
                       <div>
                         <Text
-                          value={meaning.synonyms.join(", ")}
+                          value={definition.synonyms.join(", ")}
                           size={TextSize.small}
                           type={TextType.secondary}
                         />
                       </div>
 
                       <Margin top={MarginSize.small}>
-                        <Text value={meaning.example} type={TextType.italic} />
+                        <Text
+                          value={definition.example}
+                          type={TextType.italic}
+                        />
                       </Margin>
                     </div>
                   </li>
