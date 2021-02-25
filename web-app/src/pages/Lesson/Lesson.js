@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import css from "./Lesson.scss";
 
-import { useAppNavigation } from "hooks";
-
 import {
   Block,
   FlexRow,
@@ -22,6 +20,8 @@ import {
   WordPreloader,
   WordDefinitions
 } from "./components";
+
+import { useAppNavigation } from "hooks";
 
 import {
   useLesson,
@@ -94,6 +94,8 @@ export function Lesson() {
   return (
     <div className={css.page}>
       <div className={css.content}>
+        <Margin top={MarginSize.small} />
+
         <Block rounded={true}>
           <FlexRow>
             <If condition={lesson.fetching}>
