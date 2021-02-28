@@ -10,20 +10,37 @@ namespace English.WebApi.Controllers
     {
         private readonly ICommandService<StartLesson> _startService;
         private readonly ICommandService<StopLesson> _stopService;
+        private readonly IQueryService<GetCurrentLesson, Lesson> _getService;
 
         public LessonsController(
             ICommandService<StartLesson> startService,
-            ICommandService<StopLesson> stopService
+            ICommandService<StopLesson> stopService,
+            IQueryService<GetCurrentLesson, Lesson> getService
         )
         {
             this._startService = startService;
             this._stopService = stopService;
+            this._getService = getService;
         }
 
         [HttpPost]
         public async Task<ActionResult<LessonOutputModel>> StartLesson()
         {
-            throw new NotImplementedException();
+            await this._startService.ExecuteAsync(
+                new StartLesson()
+                );
+
+            var lesson = await this._getService.ExecuteAsync(
+                new GetCurrentLesson()
+                );
+
+            var result = new LessonOutputModel
+            {
+                Id = lesson.Id,
+                Number = lesson.Number
+            };
+
+            return Ok(result);
         }
 
         [HttpDelete("{id:int}")]
