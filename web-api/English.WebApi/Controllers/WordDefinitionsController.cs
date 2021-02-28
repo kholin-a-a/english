@@ -1,6 +1,8 @@
-﻿using English.WebApi.Models;
+﻿using English.BusinessLogic;
+using English.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
@@ -8,36 +10,36 @@ namespace English.WebApi.Controllers
     [Route("")]
     public class WordDefinitionsController : ApiControllerBase
     {
-        [HttpGet("words/{id:int}/definitions")]
-        public async Task<ActionResult<List<WordDefinitionOutputModel>>> GetExplanation(int id)
+        private readonly IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>> _definitionsQuery;
+
+        public WordDefinitionsController(
+            IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>> definitionsQuery
+        )
         {
-            await Task.Yield();
+            this._definitionsQuery = definitionsQuery;
+        }
 
-            var definitions = new WordDefinitionOutputModel[]
-            {
+        [HttpGet("words/{wordId:int}/definitions")]
+        public async Task<ActionResult<List<WordDefinitionOutputModel>>> GetDefinitions(int wordId)
+        {
+            var definitions = await this._definitionsQuery.ExecuteAsync(
+                new GetWordDefinitions()
+                {
+                    WordId = wordId
+                });
+
+            var result = definitions.Select(d =>
                 new WordDefinitionOutputModel
                 {
-                    SpeechPart = "Noun",
-                    Definition = "activity requiring physical effort, carried out to sustain or improve health and fitness",
-                    Example = "exercise improves your heart and lung power",
-                    Synonyms = new string[] { "activity", "movement", "exercition", "effort", "work" }
-                },
-                new WordDefinitionOutputModel
-                {
-                    SpeechPart = "Noun",
-                    Definition = "activity requiring physical effort, carried out to sustain or improve health and fitness",
-                    Example = "exercise improves your heart and lung power",
-                },
-                new WordDefinitionOutputModel
-                {
-                    SpeechPart = "Verb",
-                    Definition = "activity requiring physical effort, carried out to sustain or improve health and fitness",
-                    Example = "exercise improves your heart and lung power",
-                    Synonyms = new string[] { "activity", "movement", "exercition", "effort", "work" }
+                    SpeechPart = d.SpeechPart.Name,
+                    Definition = d.Definition,
+                    Example = d.Example,
+                    Synonyms = d.Synonyms.Select(s => s.Text)
                 }
-            };
+            )
+            .ToList();
 
-            return Ok(definitions);
+            return Ok(result);
         }
     }
 }

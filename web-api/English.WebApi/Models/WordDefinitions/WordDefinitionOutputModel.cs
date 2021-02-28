@@ -1,4 +1,6 @@
-﻿namespace English.WebApi.Models
+﻿using System.Collections.Generic;
+
+namespace English.WebApi.Models
 {
     public class WordDefinitionOutputModel
     {
@@ -13,6 +15,6 @@
 
         public string Example { get; set; }
 
-        public string[] Synonyms { get; set; }
+        public IEnumerable<string> Synonyms { get; set; }
     }
 }
