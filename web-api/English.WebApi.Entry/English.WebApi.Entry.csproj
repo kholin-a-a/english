@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\English.BusinessLogic.Services\English.BusinessLogic.Services.csproj" />
+    <ProjectReference Include="..\English.BusinessLogic\English.BusinessLogic.csproj" />
+    <ProjectReference Include="..\English.WebApi\English.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>
