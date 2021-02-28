@@ -55,6 +55,13 @@ namespace English.WebApi.Tests.Controllers
 
         private StatsController MakeController()
         {
+            this._statsQueryMock.Setup(m =>
+                    m.ExecuteAsync(It.IsAny<GetUserStats>())
+                )
+                .ReturnsAsync(
+                    new UserStats()
+                );
+
             return new StatsController(
                 this._statsQueryMock.Object
                 );
