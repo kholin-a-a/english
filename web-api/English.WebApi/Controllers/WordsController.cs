@@ -1,7 +1,6 @@
 ﻿using English.BusinessLogic;
 using English.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
@@ -9,12 +8,18 @@ namespace English.WebApi.Controllers
     public class WordsController : ApiControllerBase
     {
         private readonly IQueryService<GetNextUserWord, Word> _nextUserWordQuery;
+        private readonly ICommandService<MarkWordAsUknown> _markWordAsUknownCommand;
+        private readonly ICommandService<MarkWordAsCompleted> _markWordAsCompletedCommand;
 
         public WordsController(
-            IQueryService<GetNextUserWord, Word> nextUserWordQuery
+            IQueryService<GetNextUserWord, Word> nextUserWordQuery,
+            ICommandService<MarkWordAsUknown> markWordAsUknownCommand,
+            ICommandService<MarkWordAsCompleted> markWordAsCompletedCommand
         )
         {
             this._nextUserWordQuery = nextUserWordQuery;
+            this._markWordAsUknownCommand = markWordAsUknownCommand;
+            this._markWordAsCompletedCommand = markWordAsCompletedCommand;
         }
 
         [HttpGet]
@@ -36,7 +41,12 @@ namespace English.WebApi.Controllers
         [HttpPost("unknown")]
         public async Task<ActionResult> MarkAsUnknown([FromBody]int id)
         {
-            await Task.Yield();
+            var command = new MarkWordAsUknown
+            {
+                WordId = id
+            };
+
+            await this._markWordAsUknownCommand.ExecuteAsync(command);
 
             return Ok();
         }
@@ -44,7 +54,14 @@ namespace English.WebApi.Controllers
         [HttpPost("completed")]
         public async Task<ActionResult> MarkAsCompleted([FromBody]WordCompletedInputModel model)
         {
-            await Task.Yield();
+            var command = new MarkWordAsCompleted()
+            {
+                WordId = model.Id,
+                LessonId = model.LessonId,
+                Text = model.Text
+            };
+
+            await this._markWordAsCompletedCommand.ExecuteAsync(command);
 
             return Ok();
         }
