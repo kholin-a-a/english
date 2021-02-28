@@ -1,6 +1,7 @@
 ﻿using English.BusinessLogic;
 using English.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
@@ -22,19 +23,13 @@ namespace English.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<LessonOutputModel>> StartLesson()
         {
-            var model = new LessonOutputModel
-            {
-                Id = 20,
-                Number = 12
-            };
-
-            return Ok(model);
+            throw new NotImplementedException();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> StopLesson(int id)
         {
-            return Ok();
+            throw new NotImplementedException();
         }
     }
 }

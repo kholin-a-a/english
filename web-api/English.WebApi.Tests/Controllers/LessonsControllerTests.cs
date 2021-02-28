@@ -17,6 +17,12 @@ namespace English.WebApi.Tests.Controllers
             this._stopLessonMock = new Mock<ICommandService<StopLesson>>();
         }
 
+        [Fact]
+        public async Task StartLesson_Default_ReturnsOk()
+        {
+            var controller = this.MakeConroller();
+        }
+
         private LessonsController MakeConroller()
         {
             return new LessonsController(
