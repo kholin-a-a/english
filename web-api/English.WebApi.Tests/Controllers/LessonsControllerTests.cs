@@ -73,6 +73,33 @@ namespace English.WebApi.Tests.Controllers
             Assert.Equal(currentLesson.Number, lesson.Number);
         }
 
+        [Fact]
+        public async Task StopLesson_Default_OkResult()
+        {
+            var controller = this.MakeConroller();
+
+            var actionResult = await controller.StopLesson(1);
+
+            Assert.IsType<OkResult>(actionResult);
+        }
+
+        [Fact]
+        public async Task StopLesson_Default_StopCommandExecuted()
+        {
+            var controller = this.MakeConroller();
+            const int lessonId = 123;
+
+            await controller.StopLesson(lessonId);
+
+            this._stopLessonMock.Verify(m =>
+                    m.ExecuteAsync(
+                        It.Is<StopLesson>(l =>
+                            l.LessonId == lessonId
+                        )
+                    )
+                );
+        }
+
         private LessonsController MakeConroller()
         {
             this._getLessonMock.Setup(m =>

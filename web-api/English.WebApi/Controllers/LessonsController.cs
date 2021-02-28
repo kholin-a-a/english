@@ -1,7 +1,6 @@
 ﻿using English.BusinessLogic;
 using English.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
@@ -46,7 +45,14 @@ namespace English.WebApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> StopLesson(int id)
         {
-            throw new NotImplementedException();
+            var command = new StopLesson
+            {
+                LessonId = id
+            };
+
+            await this._stopService.ExecuteAsync(command);
+
+            return Ok();
         }
     }
 }
