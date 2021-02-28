@@ -16,6 +16,7 @@ namespace English.WebApi
             services.AddScoped<ICommandService<StartLesson>, StartLessonService>();
             services.AddScoped<ICommandService<StopLesson>, StopLessonService>();
             services.AddScoped<IQueryService<GetCurrentLesson, Lesson>, GetCurrentLessonService>();
+            services.AddScoped<IQueryService<GetUserStats, UserStats>, GetUserStatsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
