@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace English.WebApi
 {
@@ -17,6 +18,7 @@ namespace English.WebApi
             services.AddScoped<ICommandService<StopLesson>, StopLessonService>();
             services.AddScoped<IQueryService<GetCurrentLesson, Lesson>, GetCurrentLessonService>();
             services.AddScoped<IQueryService<GetUserStats, UserStats>, GetUserStatsService>();
+            services.AddScoped<IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>>, GetWordDefinitionsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
