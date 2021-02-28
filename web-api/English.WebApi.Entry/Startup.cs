@@ -1,6 +1,9 @@
+using English.BusinessLogic;
+using English.BusinessLogic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace English.WebApi
 {
@@ -9,10 +12,19 @@ namespace English.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<ICommandService<StartLesson>, StartLessonService>();
+            services.AddScoped<ICommandService<StopLesson>, StopLessonService>();
+            services.AddScoped<IQueryService<GetCurrentLesson, Lesson>, GetCurrentLessonService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseCors(builder =>
             {
                 builder
