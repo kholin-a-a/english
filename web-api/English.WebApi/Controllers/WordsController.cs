@@ -1,23 +1,36 @@
-﻿using English.WebApi.Models;
+﻿using English.BusinessLogic;
+using English.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace English.WebApi.Controllers
 {
     public class WordsController : ApiControllerBase
     {
+        private readonly IQueryService<GetNextUserWord, Word> _nextUserWordQuery;
+
+        public WordsController(
+            IQueryService<GetNextUserWord, Word> nextUserWordQuery
+        )
+        {
+            this._nextUserWordQuery = nextUserWordQuery;
+        }
+
         [HttpGet]
         public async Task<ActionResult<WordOutputModel>> GetNextWord()
         {
-            await Task.Yield();
+            var word = await this._nextUserWordQuery.ExecuteAsync(
+                new GetNextUserWord()
+                );
 
-            var word = new WordOutputModel
+            var result = new WordOutputModel
             {
-                Id = 123,
-                Text = "exersice"
+                Id = word.Id,
+                Text = word.Text
             };
 
-            return Ok(word);
+            return Ok(result);
         }
 
         [HttpPost("unknown")]
