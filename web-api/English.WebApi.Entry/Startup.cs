@@ -25,6 +25,10 @@ namespace English.WebApi
             services.AddScoped<IQueryService<GetNextUserWord, Word>, GetNextUserWordService>();
 
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IWordRepository, WordRepository>();
+            services.AddScoped<IWordDefinitionRepository, WordDefinitionRepository>();
+            services.AddScoped<IUnknownWordRepository, UnknownWordRepository>();
+            services.AddScoped<ICompletedWordRepository, CompletedWordRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
