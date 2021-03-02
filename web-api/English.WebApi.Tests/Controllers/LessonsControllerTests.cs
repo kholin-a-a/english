@@ -11,13 +11,11 @@ namespace English.WebApi.Tests.Controllers
     public class LessonsControllerTests
     {
         private readonly Mock<ICommandService<StartLesson>> _startLessonMock;
-        private readonly Mock<ICommandService<StopLesson>> _stopLessonMock;
         private readonly Mock<IQueryService<GetCurrentLesson, Lesson>> _getLessonMock;
 
         public LessonsControllerTests()
         {
             this._startLessonMock = new Mock<ICommandService<StartLesson>>();
-            this._stopLessonMock = new Mock<ICommandService<StopLesson>>();
             this._getLessonMock = new Mock<IQueryService<GetCurrentLesson, Lesson>>();
         }
 
@@ -73,33 +71,6 @@ namespace English.WebApi.Tests.Controllers
             Assert.Equal(currentLesson.Number, lesson.Number);
         }
 
-        [Fact]
-        public async Task StopLesson_Default_OkResult()
-        {
-            var controller = this.MakeConroller();
-
-            var actionResult = await controller.StopLesson(1);
-
-            Assert.IsType<OkResult>(actionResult);
-        }
-
-        [Fact]
-        public async Task StopLesson_Default_StopCommandExecuted()
-        {
-            var controller = this.MakeConroller();
-            const int lessonId = 123;
-
-            await controller.StopLesson(lessonId);
-
-            this._stopLessonMock.Verify(m =>
-                    m.ExecuteAsync(
-                        It.Is<StopLesson>(l =>
-                            l.LessonId == lessonId
-                        )
-                    )
-                );
-        }
-
         private LessonsController MakeConroller()
         {
             this._getLessonMock.Setup(m =>
@@ -111,7 +82,6 @@ namespace English.WebApi.Tests.Controllers
 
             return new LessonsController(
                 this._startLessonMock.Object,
-                this._stopLessonMock.Object,
                 this._getLessonMock.Object
                 );
         }
