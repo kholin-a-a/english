@@ -1,12 +1,30 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class MarkWordAsCompletedService : ICommandService<MarkWordAsCompleted>
     {
-        public Task ExecuteAsync(MarkWordAsCompleted command)
+        private readonly ICompletedWordRepository _completedWordRepo;
+
+        public MarkWordAsCompletedService(ICompletedWordRepository completedWordRepo)
         {
-            return Task.CompletedTask;
+            this._completedWordRepo = completedWordRepo;
+        }
+
+        public async Task ExecuteAsync(MarkWordAsCompleted command)
+        {
+            if (command == null)
+                throw new ArgumentNullException(nameof(command));
+
+            var word = new CompletedWord
+            {
+                LessonId = command.LessonId,
+                WordId = command.WordId,
+                Text = command.Text
+            };
+
+            await this._completedWordRepo.Save(word);
         }
     }
 }
