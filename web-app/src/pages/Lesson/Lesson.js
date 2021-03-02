@@ -51,7 +51,6 @@ export function Lesson() {
   const onStopLessonHandler = () => {
     listener
       .stop()
-      .then(() => lesson.stop())
       .then(() => navigation.home())
   }
 

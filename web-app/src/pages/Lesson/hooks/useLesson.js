@@ -18,20 +18,11 @@ export function useLesson() {
       })
   }
 
-  const stop = () => {
-    setFetching(true)
-
-    return LessonHttpApi
-      .stop(id)
-      .then(() => setFetching(false))
-  }
-
   return {
     id,
     number,
     fetching,
 
-    start,
-    stop
+    start
   }
 }
