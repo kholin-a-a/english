@@ -1,17 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class GetNextUserWordService : IQueryService<GetNextUserWord, Word>
     {
+        private readonly IWordRepository _repo;
+
+        public GetNextUserWordService(IWordRepository repo)
+        {
+            this._repo = repo;
+        }
+
         public Task<Word> ExecuteAsync(GetNextUserWord query)
         {
-            return Task.FromResult(
-                new Word
-                {
-                    Id = 101,
-                    Text = "Experiment"
-                });
+            if (query == null)
+                throw new ArgumentNullException(nameof(query));
+
+            return this._repo.GetNexWord();
         }
     }
 }
