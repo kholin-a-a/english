@@ -4,6 +4,6 @@ namespace English.BusinessLogic
 {
     public interface ILessonRepository
     {
-        Task Create(Lesson lesson);
+        Task Create();
     }
 }
