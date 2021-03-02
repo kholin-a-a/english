@@ -9,6 +9,11 @@ namespace English.BusinessLogic.Repositories
             return Task.CompletedTask;
         }
 
+        public Task<int> GetLessonCount()
+        {
+            return Task.FromResult(10);
+        }
+
         public Task<Lesson> GetLessonWithMaxNumber()
         {
             return Task.FromResult(new Lesson
