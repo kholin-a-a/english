@@ -1,4 +1,5 @@
 using English.BusinessLogic;
+using English.BusinessLogic.Providers;
 using English.BusinessLogic.Repositories;
 using English.BusinessLogic.Services;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,8 @@ namespace English.WebApi
             services.AddScoped<IWordDefinitionRepository, WordDefinitionRepository>();
             services.AddScoped<IUnknownWordRepository, UnknownWordRepository>();
             services.AddScoped<ICompletedWordRepository, CompletedWordRepository>();
+
+            services.AddScoped<INextLessonNumberProvider, NextLessonNumberProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
