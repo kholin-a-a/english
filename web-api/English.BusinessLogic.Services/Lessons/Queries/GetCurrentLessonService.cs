@@ -1,17 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class GetCurrentLessonService : IQueryService<GetCurrentLesson, Lesson>
     {
+        private readonly ILessonRepository _repo;
+
+        public GetCurrentLessonService(ILessonRepository repo)
+        {
+            this._repo = repo;
+        }
+
         public Task<Lesson> ExecuteAsync(GetCurrentLesson query)
         {
-            return Task.FromResult(
-                new Lesson
-                {
-                    Id = 12,
-                    Number = 34
-                });
+            if (query == null)
+                throw new ArgumentNullException(nameof(query));
+
+            return this._repo.GetLessonWithMaxNumber();
         }
     }
 }
