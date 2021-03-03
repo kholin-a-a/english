@@ -48,6 +48,17 @@ namespace English.WebApi.Entry
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Add default user
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var users = scope.ServiceProvider.GetRequiredService<ILiteCollection<User>>();
+                users.Insert(new User { Id = 11211 });
+
+                var words = scope.ServiceProvider.GetRequiredService<ILiteCollection<Word>>();
+                words.Insert(new Word { Text = "example" });
+                words.Insert(new Word { Text = "test" });
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
