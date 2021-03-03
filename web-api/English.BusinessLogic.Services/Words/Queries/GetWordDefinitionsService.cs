@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class GetWordDefinitionsService : IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>
+    public class GetWordDefinitionsService : IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>>
     {
-        private readonly IWordDefinitionRepository _repo;
+        private readonly IWordRepository _wordRepo;
 
-        public GetWordDefinitionsService(IWordDefinitionRepository repo)
+        public GetWordDefinitionsService(IWordRepository repo)
         {
-            this._repo = repo;
+            this._wordRepo = repo;
         }
 
-        public Task<IEnumerable<WordDefinition>> ExecuteAsync(GetWordDefinitionsQuery query)
+        public async Task<IEnumerable<Definition>> ExecuteAsync(GetWordDefinitionsQuery query)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
 
-            return this._repo.GetDefinition(query.WordId);
+            var word = await this._wordRepo.Find(query.WordId);
+
+            return word.Definitions;
         }
     }
 }

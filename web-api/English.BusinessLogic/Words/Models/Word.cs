@@ -6,13 +6,13 @@ namespace English.BusinessLogic
     {
         public Word()
         {
-            this.Definitions = new Definition[0];
+            this.Definitions = new List<Definition>();
         }
 
         public int Id { get; set; }
 
         public string Text { get; set; }
 
-        public IEnumerable<Definition> Definitions { get; set; }
+        public IList<Definition> Definitions { get; set; }
     }
 }
