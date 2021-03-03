@@ -1,5 +1,6 @@
 ﻿using Moq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -7,66 +8,161 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class MarkWordAsCompletedServiceTests
     {
-        private readonly Mock<ICompletedWordRepository> _repoMock;
-        private readonly Mock<IUserContext> _userContextMock;
+        private readonly UserContextFake _userContextFake;
+        private readonly UserRepoFake _userRepoFake;
+        private readonly WordRepoFake _wordRepoFake;
 
         public MarkWordAsCompletedServiceTests()
         {
-            this._repoMock = new Mock<ICompletedWordRepository>();
-            this._userContextMock = new Mock<IUserContext>();
+            this._userContextFake = new UserContextFake();
+            this._userRepoFake = new UserRepoFake();
+            this._wordRepoFake = new WordRepoFake();
         }
 
         [Fact]
-        public async Task ExecuteAsync_CommandNull_ThrowsException()
+        public async Task ExecuteAsync_Default_NoExceptions()
         {
             var service = this.MakeService();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.ExecuteAsync(null));
+            await service.ExecuteAsync(
+                new MarkWordAsCompletedCommand()
+                );
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_WordRepoMethodCalled()
+        public async Task ExecuteAsync_CommandNull_ThrowsExceptions()
+        {
+            var service = this.MakeService();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(
+                    () => service.ExecuteAsync(null)
+                );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_FindsUserInRepo()
         {
             // Setup
-            var service = this.MakeService();
-            var userId = 12221;
+            var repoMock = new Mock<IUserRepository>();
 
-            var command = new MarkWordAsCompletedCommand
-            {
-                LessonId = 456,
-                Text = "Some spoken text",
-                WordId = 789
-            };
+            repoMock.SetReturnsDefault(
+                Task.FromResult(new User())
+                );
 
-            this._userContextMock.Setup(m =>
-                    m.UserId
+            var service = this.MakeService(userRepo: repoMock.Object);
+
+            // Action
+            await service.ExecuteAsync(
+                    new MarkWordAsCompletedCommand()
+                );
+
+            // Assert
+            repoMock.Verify(m =>
+                    m.Find(It.Is<int>(id => id == this._userContextFake.UserId)
                 )
-                .Returns(userId);
+            );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_FindsWordInRepo()
+        {
+            // Setup
+            var repoMock = new Mock<IWordRepository>();
+
+            repoMock.SetReturnsDefault(
+                Task.FromResult(new Word())
+                );
+
+            var service = this.MakeService(wordRepo: repoMock.Object);
+
+            var command = new MarkWordAsCompletedCommand { WordId = 123 };
 
             // Action
             await service.ExecuteAsync(command);
 
             // Assert
-            this._repoMock.Verify(m =>
-                m.Add(
-                    It.Is<CompletedWord>(w =>
-                        w.LessonId == command.LessonId
-                        &&
-                        w.WordId == command.WordId
-                        &&
-                        w.Text == command.Text
-                        &&
-                        w.UserId == userId
-                    )
+            repoMock.Verify(m =>
+                    m.Find(It.Is<int>(id => id == command.WordId)
                 )
             );
         }
 
-        private MarkWordAsCompletedService MakeService()
+        [Fact]
+        public async Task ExecuteAsync_Default_AddsExercise()
+        {
+            // Setup
+            var lessonId = 123;
+            var wordId = 456;
+
+            var user = new User();
+            user.Lessons.Add(
+                    new Lesson { Id = lessonId }
+                );
+
+            this._userRepoFake.User = user;
+
+            var word = new Word { Id = wordId };
+            
+            this._wordRepoFake.Word = word;
+
+            var service = this.MakeService();
+
+            var command = new MarkWordAsCompletedCommand
+            {
+                WordId = wordId,
+                LessonId = lessonId,
+                Text = "Some text"
+            };
+
+            // Action
+            await service.ExecuteAsync(command);
+
+            // Assert
+            Assert.Single(
+                user.Lessons.Single(l => l.Id == lessonId).Exercises,
+                e =>
+                    e.Word == word
+                    &&
+                    e.UserText == command.Text
+                );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_UpdateMethodCalled()
+        {
+            // Setup
+            var repoMock = new Mock<IUserRepository>();
+
+            var user = new User();
+            user.Lessons.Add(new Lesson());
+
+            repoMock.SetReturnsDefault(
+                    Task.FromResult(user)
+                );
+
+            var service = this.MakeService(userRepo: repoMock.Object);
+
+            // Action
+            await service.ExecuteAsync(
+                    new MarkWordAsCompletedCommand()
+                );
+
+            // Assert
+            repoMock.Verify(m =>
+                    m.Update(It.IsAny<User>())
+                );
+        }
+
+        private MarkWordAsCompletedService MakeService(
+            IUserContext userContext = null,
+            IUserRepository userRepo = null,
+            IWordRepository wordRepo = null
+        )
         {
             return new MarkWordAsCompletedService(
-                this._repoMock.Object,
-                this._userContextMock.Object
+                    userContext ?? this._userContextFake,
+                    userRepo ?? this._userRepoFake,
+                    wordRepo ?? this._wordRepoFake
                 );
         }
     }

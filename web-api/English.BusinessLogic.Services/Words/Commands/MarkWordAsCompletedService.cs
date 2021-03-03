@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class MarkWordAsCompletedService : ICommandService<MarkWordAsCompletedCommand>
     {
-        private readonly ICompletedWordRepository _repo;
         private readonly IUserContext _userContext;
+        private readonly IUserRepository _userRepo;
+        private readonly IWordRepository _wordRepo;
 
         public MarkWordAsCompletedService(
-            ICompletedWordRepository repo,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRepository userRepo,
+            IWordRepository wordRepo
         )
         {
-            this._repo = repo;
             this._userContext = userContext;
+            this._userRepo = userRepo;
+            this._wordRepo = wordRepo;
         }
 
         public async Task ExecuteAsync(MarkWordAsCompletedCommand command)
@@ -22,15 +26,30 @@ namespace English.BusinessLogic.Services
             if (command == null)
                 throw new ArgumentNullException(nameof(command));
 
-            var word = new CompletedWord
+            var user = await this._userRepo.Find(
+                    this._userContext.UserId
+                );
+
+            var word = await this._wordRepo.Find(
+                    command.WordId
+                );
+
+            var lesson = user.Lessons
+                .Where(l => l.Id == command.LessonId)
+                .SingleOrDefault();
+
+            if (lesson == null)
+                return;
+
+            var exersice = new Exercise
             {
-                LessonId = command.LessonId,
-                WordId = command.WordId,
-                Text = command.Text,
-                UserId = this._userContext.UserId
+                UserText = command.Text,
+                Word = word
             };
 
-            await this._repo.Add(word);
+            lesson.Exercises.Add(exersice);
+
+            await this._userRepo.Update(user);
         }
     }
 }
