@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class GetCurrentLessonService : IQueryService<GetCurrentLesson, Lesson>
+    public class GetCurrentLessonService : IQueryService<GetCurrentLessonQuery, Lesson>
     {
         private readonly ILessonRepository _repo;
 
@@ -12,7 +12,7 @@ namespace English.BusinessLogic.Services
             this._repo = repo;
         }
 
-        public Task<Lesson> ExecuteAsync(GetCurrentLesson query)
+        public Task<Lesson> ExecuteAsync(GetCurrentLessonQuery query)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));

@@ -20,7 +20,7 @@ namespace English.WebApi
             services.AddScoped<ICommandService<MarkWordAsCompleted>, MarkWordAsCompletedService>();
             services.AddScoped<ICommandService<MarkWordAsUknown>, MarkWordAsUknownService>();
 
-            services.AddScoped<IQueryService<GetCurrentLesson, Lesson>, GetCurrentLessonService>();
+            services.AddScoped<IQueryService<GetCurrentLessonQuery, Lesson>, GetCurrentLessonService>();
             services.AddScoped<IQueryService<GetUserStats, UserStats>, GetUserStatsService>();
             services.AddScoped<IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>>, GetWordDefinitionsService>();
             services.AddScoped<IQueryService<GetNextUserWord, Word>, GetNextUserWordService>();

@@ -11,12 +11,12 @@ namespace English.WebApi.Tests.Controllers
     public class LessonsControllerTests
     {
         private readonly Mock<ICommandService<StartLessonCommand>> _startLessonMock;
-        private readonly Mock<IQueryService<GetCurrentLesson, Lesson>> _getLessonMock;
+        private readonly Mock<IQueryService<GetCurrentLessonQuery, Lesson>> _getLessonMock;
 
         public LessonsControllerTests()
         {
             this._startLessonMock = new Mock<ICommandService<StartLessonCommand>>();
-            this._getLessonMock = new Mock<IQueryService<GetCurrentLesson, Lesson>>();
+            this._getLessonMock = new Mock<IQueryService<GetCurrentLessonQuery, Lesson>>();
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace English.WebApi.Tests.Controllers
             };
 
             this._getLessonMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetCurrentLesson>())
+                    m.ExecuteAsync(It.IsAny<GetCurrentLessonQuery>())
                 )
                 .ReturnsAsync(currentLesson);
 
@@ -74,7 +74,7 @@ namespace English.WebApi.Tests.Controllers
         private LessonsController MakeConroller()
         {
             this._getLessonMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetCurrentLesson>())
+                    m.ExecuteAsync(It.IsAny<GetCurrentLessonQuery>())
                 )
                 .ReturnsAsync(
                     new Lesson()

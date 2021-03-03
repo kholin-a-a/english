@@ -41,7 +41,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             var factLesson = await service.ExecuteAsync(
-                    new GetCurrentLesson()
+                    new GetCurrentLessonQuery()
                 );
 
             // Assert
