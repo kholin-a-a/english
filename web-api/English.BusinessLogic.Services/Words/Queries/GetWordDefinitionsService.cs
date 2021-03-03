@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class GetWordDefinitionsService : IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>>
+    public class GetWordDefinitionsService : IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>
     {
         private readonly IWordDefinitionRepository _repo;
 
@@ -14,7 +14,7 @@ namespace English.BusinessLogic.Services
             this._repo = repo;
         }
 
-        public Task<IEnumerable<WordDefinition>> ExecuteAsync(GetWordDefinitions query)
+        public Task<IEnumerable<WordDefinition>> ExecuteAsync(GetWordDefinitionsQuery query)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));

@@ -10,10 +10,10 @@ namespace English.WebApi.Controllers
     [Route("")]
     public class WordDefinitionsController : ApiControllerBase
     {
-        private readonly IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>> _definitionsQuery;
+        private readonly IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>> _definitionsQuery;
 
         public WordDefinitionsController(
-            IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>> definitionsQuery
+            IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>> definitionsQuery
         )
         {
             this._definitionsQuery = definitionsQuery;
@@ -23,7 +23,7 @@ namespace English.WebApi.Controllers
         public async Task<ActionResult<List<WordDefinitionOutputModel>>> GetDefinitions(int wordId)
         {
             var definitions = await this._definitionsQuery.ExecuteAsync(
-                new GetWordDefinitions()
+                new GetWordDefinitionsQuery()
                 {
                     WordId = wordId
                 });

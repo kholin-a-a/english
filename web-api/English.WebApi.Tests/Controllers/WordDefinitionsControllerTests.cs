@@ -11,11 +11,11 @@ namespace English.WebApi.Tests.Controllers
 {
     public class WordDefinitionsControllerTests
     {
-        private readonly Mock<IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>>> _definitionsQueryMock;
+        private readonly Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>> _definitionsQueryMock;
 
         public WordDefinitionsControllerTests()
         {
-            this._definitionsQueryMock = new Mock<IQueryService<GetWordDefinitions, IEnumerable<WordDefinition>>>();
+            this._definitionsQueryMock = new Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>>();
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace English.WebApi.Tests.Controllers
 
             this._definitionsQueryMock.Verify(m =>
                 m.ExecuteAsync(
-                    It.Is<GetWordDefinitions>(q =>
+                    It.Is<GetWordDefinitionsQuery>(q =>
                         q.WordId == wordId
                         )
                     )
@@ -78,7 +78,7 @@ namespace English.WebApi.Tests.Controllers
             };
 
             this._definitionsQueryMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetWordDefinitions>())
+                    m.ExecuteAsync(It.IsAny<GetWordDefinitionsQuery>())
                 )
                 .ReturnsAsync(wordDefinitions);
 

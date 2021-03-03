@@ -1,6 +1,6 @@
 ﻿namespace English.BusinessLogic
 {
-    public class GetWordDefinitions
+    public class GetWordDefinitionsQuery
     {
         public int WordId { get; set; }
     }

@@ -27,7 +27,7 @@ namespace English.BusinessLogic.Services.Tests
         {
             // Setup
             var service = this.MakeService();
-            var query = new GetWordDefinitions()
+            var query = new GetWordDefinitionsQuery()
             {
                 WordId = 509
             };
