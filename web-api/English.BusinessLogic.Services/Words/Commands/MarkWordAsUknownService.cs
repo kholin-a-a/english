@@ -5,16 +5,19 @@ namespace English.BusinessLogic.Services
 {
     public class MarkWordAsUknownService : ICommandService<MarkWordAsUknownCommand>
     {
-        private readonly IUnknownWordRepository _repo;
         private readonly IUserContext _userContext;
+        private readonly IUserRepository _userRepo;
+        private readonly IWordRepository _wordRepo;
 
         public MarkWordAsUknownService(
-            IUnknownWordRepository repo,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRepository userRepo,
+            IWordRepository wordRepo
         )
         {
-            this._repo = repo;
             this._userContext = userContext;
+            this._userRepo = userRepo;
+            this._wordRepo = wordRepo; 
         }
 
         public async Task ExecuteAsync(MarkWordAsUknownCommand command)
@@ -22,13 +25,17 @@ namespace English.BusinessLogic.Services
             if (command == null)
                 throw new ArgumentNullException(nameof(command));
 
-            var word = new UnknownWord
-            {
-                WordId = command.WordId,
-                UserId = this._userContext.UserId
-            };
+            var user = await this._userRepo.Find(
+                    this._userContext.UserId
+                );
 
-            await this._repo.Add(word);
+            var word = await this._wordRepo.Find(
+                    command.WordId
+                );
+
+            user.UnknownWords.Add(word);
+
+            await this._userRepo.Update(user);
         }
     }
 }
