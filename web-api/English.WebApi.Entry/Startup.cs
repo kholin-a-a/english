@@ -1,11 +1,13 @@
 using English.BusinessLogic;
 using English.BusinessLogic.Repositories;
 using English.BusinessLogic.Services;
+using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.IO;
 
 namespace English.WebApi.Entry
 {
@@ -25,6 +27,11 @@ namespace English.WebApi.Entry
             services.AddScoped<IQueryService<GetNextUserWordQuery, Word>, GetNextUserWordService>();
 
             services.AddScoped<IUserContext, UserContextStub>();
+
+            var dbStream = new MemoryStream();
+            services.AddScoped<ILiteDatabase>(sp => new LiteDatabase(dbStream));
+            services.AddScoped(sp => sp.GetRequiredService<ILiteDatabase>().GetCollection<User>());
+            services.AddScoped(sp => sp.GetRequiredService<ILiteDatabase>().GetCollection<Word>());
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IWordRepository, WordRepository>();
