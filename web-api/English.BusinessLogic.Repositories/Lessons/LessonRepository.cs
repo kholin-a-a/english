@@ -14,7 +14,7 @@ namespace English.BusinessLogic.Repositories
             return Task.FromResult(10);
         }
 
-        public Task<Lesson> GetLessonWithMaxNumber()
+        public Task<Lesson> GetLessonWithMaxNumber(int userId)
         {
             return Task.FromResult(new Lesson
             {
