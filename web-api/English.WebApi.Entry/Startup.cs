@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 
-namespace English.WebApi
+namespace English.WebApi.Entry
 {
     public class Startup
     {
@@ -32,6 +32,8 @@ namespace English.WebApi
             services.AddScoped<ICompletedWordRepository, CompletedWordRepository>();
 
             services.AddScoped<INextLessonNumberProvider, NextLessonNumberProvider>();
+
+            services.AddScoped<IUserContext, UserContextStub>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
