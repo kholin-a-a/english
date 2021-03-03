@@ -17,7 +17,7 @@ namespace English.BusinessLogic.Services
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
 
-            return this._repo.GetNexWord();
+            return this._repo.GetNextUserWord();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace English.BusinessLogic.Services.Tests
             };
 
             this._repoMock.Setup(m =>
-                    m.GetNexWord()
+                    m.GetNextUserWord()
                 )
                 .ReturnsAsync(word);
 

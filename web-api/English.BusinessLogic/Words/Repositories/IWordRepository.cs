@@ -4,6 +4,6 @@ namespace English.BusinessLogic
 {
     public interface IWordRepository
     {
-        Task<Word> GetNexWord();
+        Task<Word> GetNextUserWord();
     }
 }
