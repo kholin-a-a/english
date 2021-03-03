@@ -1,34 +1,30 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class GetUserStatsService : IQueryService<GetUserStatsQuery, UserStats>
     {
-        private readonly ILessonRepository _lessonRepo;
         private readonly IUserContext _userContext;
+        private readonly IUserRepository _userRepo;
 
         public GetUserStatsService(
-            ILessonRepository lessonRepo,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRepository userRepo
         )
         {
-            this._lessonRepo = lessonRepo;
             this._userContext = userContext;
+            this._userRepo = userRepo;
         }
 
         public async Task<UserStats> ExecuteAsync(GetUserStatsQuery query)
         {
-            if (query == null)
-                throw new ArgumentNullException(nameof(query));
-
-            var count = await this._lessonRepo.GetLessonCount(
-                this._userContext.UserId
+            var user = await this._userRepo.Find(
+                    this._userContext.UserId
                 );
 
             return new UserStats
             {
-                TotalLessons = count
+                TotalLessons = user.Lessons.Count
             };
         }
     }
