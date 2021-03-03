@@ -18,10 +18,7 @@ namespace English.BusinessLogic.Services.Tests
         [Fact]
         public async Task ExecuteAsync_Default_NoExceptions()
         {
-            var service = new StartLessonService(
-                    this._userContextFake,
-                    this._userRepoFake
-                );
+            var service = this.MakeService();
 
             await service.ExecuteAsync(
                 new StartLessonCommand()
@@ -34,16 +31,11 @@ namespace English.BusinessLogic.Services.Tests
             // Setup
             var repoMock = new Mock<IUserRepository>();
 
-            var user = new User();
-
             repoMock.SetReturnsDefault(
-                    Task.FromResult(user)
+                    Task.FromResult(new User())
                 );
 
-            var service = new StartLessonService(
-                    this._userContextFake,
-                    repoMock.Object
-                );
+            var service = this.MakeService(repo: repoMock.Object);
 
             // Action
             await service.ExecuteAsync(
@@ -89,6 +81,17 @@ namespace English.BusinessLogic.Services.Tests
                     )
                 )
             );
+        }
+
+        private StartLessonService MakeService(
+            IUserContext context = null,
+            IUserRepository repo = null
+        )
+        {
+            return new StartLessonService(
+                    context ?? this._userContextFake,
+                    repo ?? this._userRepoFake
+                );
         }
     }
 }
