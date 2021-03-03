@@ -7,10 +7,10 @@ namespace English.WebApi.Controllers
 {
     public class StatsController : ApiControllerBase
     {
-        private readonly IQueryService<GetUserStats, UserStats> _statsQuery;
+        private readonly IQueryService<GetUserStatsQuery, UserStats> _statsQuery;
 
         public StatsController(
-            IQueryService<GetUserStats, UserStats> statsQuery
+            IQueryService<GetUserStatsQuery, UserStats> statsQuery
         )
         {
             this._statsQuery = statsQuery;
@@ -20,7 +20,7 @@ namespace English.WebApi.Controllers
         public async Task<ActionResult<StatsOuputModel>> GetStats()
         {
             var stats = await this._statsQuery.ExecuteAsync(
-                new GetUserStats()
+                new GetUserStatsQuery()
                 );
 
             var result = new StatsOuputModel()

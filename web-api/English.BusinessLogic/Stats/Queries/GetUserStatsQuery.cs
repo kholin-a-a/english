@@ -1,6 +1,6 @@
 ﻿namespace English.BusinessLogic
 {
-    public class GetUserStats
+    public class GetUserStatsQuery
     {
     }
 }

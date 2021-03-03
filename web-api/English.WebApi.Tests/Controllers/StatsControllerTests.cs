@@ -10,11 +10,11 @@ namespace English.WebApi.Tests.Controllers
 {
     public class StatsControllerTests
     {
-        private readonly Mock<IQueryService<GetUserStats, UserStats>> _statsQueryMock;
+        private readonly Mock<IQueryService<GetUserStatsQuery, UserStats>> _statsQueryMock;
 
         public StatsControllerTests()
         {
-            this._statsQueryMock = new Mock<IQueryService<GetUserStats, UserStats>>();
+            this._statsQueryMock = new Mock<IQueryService<GetUserStatsQuery, UserStats>>();
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace English.WebApi.Tests.Controllers
             };
 
             this._statsQueryMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetUserStats>())
+                    m.ExecuteAsync(It.IsAny<GetUserStatsQuery>())
                 )
                 .ReturnsAsync(userStats);
 
@@ -56,7 +56,7 @@ namespace English.WebApi.Tests.Controllers
         private StatsController MakeController()
         {
             this._statsQueryMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetUserStats>())
+                    m.ExecuteAsync(It.IsAny<GetUserStatsQuery>())
                 )
                 .ReturnsAsync(
                     new UserStats()
