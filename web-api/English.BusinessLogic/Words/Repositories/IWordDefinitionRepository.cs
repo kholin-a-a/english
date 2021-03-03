@@ -5,6 +5,6 @@ namespace English.BusinessLogic
 {
     public interface IWordDefinitionRepository
     {
-        Task<IEnumerable<WordDefinition>> DefineWord(int wordId);
+        Task<IEnumerable<WordDefinition>> GetDefinition(int wordId);
     }
 }

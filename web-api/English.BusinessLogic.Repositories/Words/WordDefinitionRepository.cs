@@ -5,7 +5,7 @@ namespace English.BusinessLogic
 {
     public class WordDefinitionRepository : IWordDefinitionRepository
     {
-        public async Task<IEnumerable<WordDefinition>> DefineWord(int wordId)
+        public async Task<IEnumerable<WordDefinition>> GetDefinition(int wordId)
         {
             await Task.Yield();
 

@@ -34,7 +34,7 @@ namespace English.BusinessLogic.Services.Tests
             var definitions = new WordDefinition[0];
 
             this._repoMock.Setup(m =>
-                m.DefineWord(
+                m.GetDefinition(
                     It.Is<int>(id => id == query.WordId)
                     )
                 )
