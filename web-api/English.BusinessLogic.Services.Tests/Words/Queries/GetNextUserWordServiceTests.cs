@@ -27,7 +27,7 @@ namespace English.BusinessLogic.Services.Tests
         {
             // Setup
             var service = this.MakeService();
-            var query = new GetNextUserWord();
+            var query = new GetNextUserWordQuery();
             var word = new Word
             {
                 Id = 123,

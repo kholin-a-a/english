@@ -10,13 +10,13 @@ namespace English.WebApi.Tests.Controllers
 {
     public class WordsControllerTests
     {
-        private readonly Mock<IQueryService<GetNextUserWord, Word>> _nextUserWordQueryMock;
+        private readonly Mock<IQueryService<GetNextUserWordQuery, Word>> _nextUserWordQueryMock;
         private readonly Mock<ICommandService<MarkWordAsUknown>> _markWordAsUknownCommandMock;
         private readonly Mock<ICommandService<MarkWordAsCompleted>> _markWordAsCompletedCommandMock;
 
         public WordsControllerTests()
         {
-            this._nextUserWordQueryMock = new Mock<IQueryService<GetNextUserWord, Word>>();
+            this._nextUserWordQueryMock = new Mock<IQueryService<GetNextUserWordQuery, Word>>();
             this._markWordAsUknownCommandMock = new Mock<ICommandService<MarkWordAsUknown>>();
             this._markWordAsCompletedCommandMock = new Mock<ICommandService<MarkWordAsCompleted>>();
         }
@@ -44,7 +44,7 @@ namespace English.WebApi.Tests.Controllers
             };
 
             this._nextUserWordQueryMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetNextUserWord>())
+                    m.ExecuteAsync(It.IsAny<GetNextUserWordQuery>())
                 )
                 .ReturnsAsync(nextWord);
 
@@ -130,7 +130,7 @@ namespace English.WebApi.Tests.Controllers
         private WordsController MakeController()
         {
             this._nextUserWordQueryMock.Setup(m =>
-                    m.ExecuteAsync(It.IsAny<GetNextUserWord>())
+                    m.ExecuteAsync(It.IsAny<GetNextUserWordQuery>())
                 )
                 .ReturnsAsync(
                     new Word()

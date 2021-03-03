@@ -7,12 +7,12 @@ namespace English.WebApi.Controllers
 {
     public class WordsController : ApiControllerBase
     {
-        private readonly IQueryService<GetNextUserWord, Word> _nextUserWordQuery;
+        private readonly IQueryService<GetNextUserWordQuery, Word> _nextUserWordQuery;
         private readonly ICommandService<MarkWordAsUknown> _markWordAsUknownCommand;
         private readonly ICommandService<MarkWordAsCompleted> _markWordAsCompletedCommand;
 
         public WordsController(
-            IQueryService<GetNextUserWord, Word> nextUserWordQuery,
+            IQueryService<GetNextUserWordQuery, Word> nextUserWordQuery,
             ICommandService<MarkWordAsUknown> markWordAsUknownCommand,
             ICommandService<MarkWordAsCompleted> markWordAsCompletedCommand
         )
@@ -26,7 +26,7 @@ namespace English.WebApi.Controllers
         public async Task<ActionResult<WordOutputModel>> GetNextWord()
         {
             var word = await this._nextUserWordQuery.ExecuteAsync(
-                new GetNextUserWord()
+                new GetNextUserWordQuery()
                 );
 
             var result = new WordOutputModel

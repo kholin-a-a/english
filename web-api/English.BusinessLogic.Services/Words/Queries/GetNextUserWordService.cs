@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class GetNextUserWordService : IQueryService<GetNextUserWord, Word>
+    public class GetNextUserWordService : IQueryService<GetNextUserWordQuery, Word>
     {
         private readonly IWordRepository _repo;
 
@@ -12,7 +12,7 @@ namespace English.BusinessLogic.Services
             this._repo = repo;
         }
 
-        public Task<Word> ExecuteAsync(GetNextUserWord query)
+        public Task<Word> ExecuteAsync(GetNextUserWordQuery query)
         {
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
