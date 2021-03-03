@@ -10,10 +10,10 @@ namespace English.WebApi.Controllers
     [Route("")]
     public class WordDefinitionsController : ApiControllerBase
     {
-        private readonly IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>> _definitionsQuery;
+        private readonly IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>> _definitionsQuery;
 
         public WordDefinitionsController(
-            IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>> definitionsQuery
+            IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>> definitionsQuery
         )
         {
             this._definitionsQuery = definitionsQuery;
@@ -31,10 +31,10 @@ namespace English.WebApi.Controllers
             var result = definitions.Select(d =>
                 new WordDefinitionOutputModel
                 {
-                    SpeechPart = d.SpeechPart.Name,
-                    Definition = d.Definition,
+                    SpeechPart = d.SpeechPart,
+                    Definition = d.Value,
                     Example = d.Example,
-                    Synonyms = d.Synonyms.Select(s => s.Text)
+                    Synonyms = d.Synonyms
                 }
             )
             .ToList();

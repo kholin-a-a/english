@@ -1,6 +1,4 @@
 using English.BusinessLogic;
-using English.BusinessLogic.Providers;
-using English.BusinessLogic.Repositories;
 using English.BusinessLogic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,14 +22,6 @@ namespace English.WebApi.Entry
             services.AddScoped<IQueryService<GetUserStatsQuery, UserStats>, GetUserStatsService>();
             services.AddScoped<IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>>, GetWordDefinitionsService>();
             services.AddScoped<IQueryService<GetNextUserWordQuery, Word>, GetNextUserWordService>();
-
-            services.AddScoped<ILessonRepository, LessonRepository>();
-            services.AddScoped<IUnlearnedWordRepository, WordRepository>();
-            services.AddScoped<IWordDefinitionRepository, WordDefinitionRepository>();
-            services.AddScoped<IUnknownWordRepository, UnknownWordRepository>();
-            services.AddScoped<ICompletedWordRepository, CompletedWordRepository>();
-
-            services.AddScoped<INextLessonNumberProvider, NextLessonNumberProvider>();
 
             services.AddScoped<IUserContext, UserContextStub>();
         }

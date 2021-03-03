@@ -11,11 +11,11 @@ namespace English.WebApi.Tests.Controllers
 {
     public class WordDefinitionsControllerTests
     {
-        private readonly Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>> _definitionsQueryMock;
+        private readonly Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>>> _definitionsQueryMock;
 
         public WordDefinitionsControllerTests()
         {
-            this._definitionsQueryMock = new Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>>();
+            this._definitionsQueryMock = new Mock<IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>>>();
         }
 
         [Fact]
@@ -56,24 +56,14 @@ namespace English.WebApi.Tests.Controllers
             var example = "exercise improves your heart and lung power";
             var syn = "activity";
 
-            var wordDefinitions = new WordDefinition[]
+            var wordDefinitions = new Definition[]
             {
-                new WordDefinition
+                new Definition
                 {
-                     SpeechPart = new SpeechPart
-                     {
-                        Name = speechPart
-                     },
-                     Definition = definition,
+                     SpeechPart = speechPart,
+                     Value = definition,
                      Example = example,
-                     Synonyms = new Word[]
-                     {
-                        new Word
-                        {
-                            Id = 1,
-                            Text = syn
-                        }
-                     }
+                     Synonyms = new string[] { syn }
                 }
             };
 
