@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class MarkWordAsCompletedService : ICommandService<MarkWordAsCompleted>
+    public class MarkWordAsCompletedService : ICommandService<MarkWordAsCompletedCommand>
     {
         private readonly ICompletedWordRepository _repo;
         private readonly IUserContext _userContext;
@@ -17,7 +17,7 @@ namespace English.BusinessLogic.Services
             this._userContext = userContext;
         }
 
-        public async Task ExecuteAsync(MarkWordAsCompleted command)
+        public async Task ExecuteAsync(MarkWordAsCompletedCommand command)
         {
             if (command == null)
                 throw new ArgumentNullException(nameof(command));

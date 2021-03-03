@@ -31,7 +31,7 @@ namespace English.BusinessLogic.Services.Tests
             var service = this.MakeService();
             var userId = 12221;
 
-            var command = new MarkWordAsCompleted
+            var command = new MarkWordAsCompletedCommand
             {
                 LessonId = 456,
                 Text = "Some spoken text",
