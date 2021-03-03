@@ -1,6 +1,7 @@
 ﻿using Moq;
 using System.Threading.Tasks;
 using Xunit;
+using System.Linq;
 
 namespace English.BusinessLogic.Services.Tests
 {
@@ -78,6 +79,8 @@ namespace English.BusinessLogic.Services.Tests
                         u.Id == user.Id
                         &&
                         u.Lessons.Count == 1
+                        &&
+                        u.Lessons.Single().Id == 1
                     )
                 )
             );

@@ -20,9 +20,12 @@ namespace English.BusinessLogic.Services
         {
             var user = await this._userRepo.Find(this._userContext.UserId);
 
-            user.Lessons.Add(
-                new Lesson()
-                );
+            var lesson = new Lesson
+            {
+                Id = user.Lessons.Count + 1
+            };
+
+            user.Lessons.Add(lesson);
 
             await this._userRepo.Update(user);
         }
