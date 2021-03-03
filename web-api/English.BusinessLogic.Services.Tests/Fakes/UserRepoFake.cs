@@ -4,14 +4,19 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class UserRepoFake : IUserRepository
     {
-        public async Task<User> Find(int id)
+        public UserRepoFake()
         {
-            await Task.Yield();
-
-            return new User
+            this.User = new User
             {
                 Id = 123
             };
+        }
+
+        public User User { get; set; }
+
+        public Task<User> Find(int id)
+        {
+            return Task.FromResult(this.User);
         }
 
         public Task Update(User user)

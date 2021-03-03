@@ -1,5 +1,5 @@
 ﻿using Moq;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -9,61 +9,88 @@ namespace English.BusinessLogic.Services.Tests
     {
         private readonly Mock<ILessonRepository> _repoMock;
         private readonly Mock<IUserContext> _userContextMock;
+        private readonly UserContextFake _userContextFake;
+        private readonly UserRepoFake _userRepoFake;
 
         public GetCurrentLessonServiceTests()
         {
             this._repoMock = new Mock<ILessonRepository>();
             this._userContextMock = new Mock<IUserContext>();
+
+            this._userContextFake = new UserContextFake();
+            this._userRepoFake = new UserRepoFake();
         }
 
         [Fact]
-        public async Task ExecuteAsync_NullQuery_ThrowsException()
+        public async Task ExecuteAsync_Default_NoExceptions()
         {
-            var service = this.MakeService();
+            var service = new GetCurrentLessonService(
+                this._userContextFake,
+                this._userRepoFake
+                );
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.ExecuteAsync(null));
+            await service.ExecuteAsync(
+                new GetCurrentLessonQuery()
+                );
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_ReturnsLessonWithMaxNumber()
+        public async Task ExecuteAsync_Default_FindsUserInRepo()
         {
             // Setup
-            var service = this.MakeService();
-            var userId = 11211;
-            var lesson = new Lesson
-            {
-                Id = 111,
-                Number = 222,
-                UserId = userId
-            };
+            var repoMock = new Mock<IUserRepository>();
 
-            this._repoMock.Setup(m =>
-                    m.GetLessonWithMaxNumber(
-                        It.Is<int>(id => id == userId)
-                        )
-                )
-                .ReturnsAsync(lesson);
+            repoMock.SetReturnsDefault(
+                Task.FromResult(new User())
+                );
 
-            this._userContextMock.Setup(m =>
-                    m.UserId
-                )
-                .Returns(userId);
+            var service = new GetCurrentLessonService(
+                this._userContextFake,
+                repoMock.Object
+                );
 
             // Action
-            var factLesson = await service.ExecuteAsync(
-                    new GetCurrentLessonQuery()
+            await service.ExecuteAsync(
+                new GetCurrentLessonQuery()
                 );
 
             // Assert
-            Assert.Equal(lesson, factLesson);
+            repoMock.Verify(m =>
+                    m.Find(
+                        It.Is<int>(id => id == this._userContextFake.UserId)
+                    )
+                );
         }
 
-        private GetCurrentLessonService MakeService()
+        [Fact]
+        public async Task ExecuteAsync_Default_ReturnsLastLesson()
         {
-            return new GetCurrentLessonService(
-                this._repoMock.Object,
-                this._userContextMock.Object
+            // Setup
+            var last = new Lesson { Id = 5 };
+
+            this._userRepoFake.User = new User
+            {
+                Id = 32,
+                Lessons = new List<Lesson>()
+                {
+                    new Lesson { Id = 1 },
+                    last,
+                    new Lesson { Id = 2 }
+                }
+            };
+
+            var service = new GetCurrentLessonService(
+                this._userContextFake,
+                this._userRepoFake
                 );
+
+            // Action
+            var lesson = await service.ExecuteAsync(
+                new GetCurrentLessonQuery()
+                );
+
+            // Assert
+            Assert.Equal(last, lesson);
         }
     }
 }
