@@ -25,6 +25,11 @@ namespace English.BusinessLogic.Repositories.Tests
             return this.Words;
         }
 
+        public BsonValue Insert(Word entity)
+        {
+            return default;
+        }
+
         #region NotIMplemented
         public string Name => throw new NotImplementedException();
 
@@ -188,11 +193,6 @@ namespace English.BusinessLogic.Repositories.Tests
         }
 
         public ILiteCollection<Word> Include(BsonExpression keySelector)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BsonValue Insert(Word entity)
         {
             throw new NotImplementedException();
         }

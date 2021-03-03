@@ -28,5 +28,10 @@ namespace English.BusinessLogic.Services.Tests
         {
             return Task.FromResult(this.Words);
         }
+
+        public Task Add(Word word)
+        {
+            return Task.CompletedTask;
+        }
     }
 }
