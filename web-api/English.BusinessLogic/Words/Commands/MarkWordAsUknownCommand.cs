@@ -1,6 +1,6 @@
 ﻿namespace English.BusinessLogic
 {
-    public class MarkWordAsUknown
+    public class MarkWordAsUknownCommand
     {
         public int WordId { get; set; }
     }

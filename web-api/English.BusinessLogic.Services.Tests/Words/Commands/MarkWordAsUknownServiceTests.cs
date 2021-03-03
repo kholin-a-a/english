@@ -8,10 +8,12 @@ namespace English.BusinessLogic.Services.Tests
     public class MarkWordAsUknownServiceTests
     {
         private readonly Mock<IUnknownWordRepository> _repoMock;
+        private readonly Mock<IUserContext> _userContextMock;
 
         public MarkWordAsUknownServiceTests()
         {
             this._repoMock = new Mock<IUnknownWordRepository>();
+            this._userContextMock = new Mock<IUserContext>();
         }
 
         [Fact]
@@ -27,10 +29,16 @@ namespace English.BusinessLogic.Services.Tests
         {
             // Setup
             var service = this.MakeService();
-            var command = new MarkWordAsUknown
+            var userId = 12121;
+            var command = new MarkWordAsUknownCommand
             {
                 WordId = 33
             };
+
+            this._userContextMock.Setup(m =>
+                    m.UserId
+                )
+                .Returns(userId);
 
             // Action
             await service.ExecuteAsync(command);
@@ -38,15 +46,20 @@ namespace English.BusinessLogic.Services.Tests
             // Assert
             this._repoMock.Verify(m =>
                 m.Save(
-                    It.Is<UnknownWord>(w => w.WordId == command.WordId)
+                    It.Is<UnknownWord>(w =>
+                        w.WordId == command.WordId
+                        &&
+                        w.UserId == userId
                     )
-                );
+                )
+            );
         }
 
         private MarkWordAsUknownService MakeService()
         {
             return new MarkWordAsUknownService(
-                this._repoMock.Object
+                this._repoMock.Object,
+                this._userContextMock.Object
                 );
         }
     }

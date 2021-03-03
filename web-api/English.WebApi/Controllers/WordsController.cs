@@ -8,12 +8,12 @@ namespace English.WebApi.Controllers
     public class WordsController : ApiControllerBase
     {
         private readonly IQueryService<GetNextUserWordQuery, Word> _nextUserWordQuery;
-        private readonly ICommandService<MarkWordAsUknown> _markWordAsUknownCommand;
+        private readonly ICommandService<MarkWordAsUknownCommand> _markWordAsUknownCommand;
         private readonly ICommandService<MarkWordAsCompletedCommand> _markWordAsCompletedCommand;
 
         public WordsController(
             IQueryService<GetNextUserWordQuery, Word> nextUserWordQuery,
-            ICommandService<MarkWordAsUknown> markWordAsUknownCommand,
+            ICommandService<MarkWordAsUknownCommand> markWordAsUknownCommand,
             ICommandService<MarkWordAsCompletedCommand> markWordAsCompletedCommand
         )
         {
@@ -41,7 +41,7 @@ namespace English.WebApi.Controllers
         [HttpPost("unknown")]
         public async Task<ActionResult> MarkAsUnknown([FromBody]int id)
         {
-            var command = new MarkWordAsUknown
+            var command = new MarkWordAsUknownCommand
             {
                 WordId = id
             };
