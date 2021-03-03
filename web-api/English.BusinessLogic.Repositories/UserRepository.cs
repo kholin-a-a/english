@@ -1,18 +1,27 @@
-﻿using System;
+﻿using LiteDB;
 using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task<User> Find(int id)
+        private readonly ILiteCollection<User> _users;
+
+        public UserRepository(ILiteCollection<User> users)
         {
-            throw new NotImplementedException();
+            this._users = users;
         }
 
-        public Task Update(User user)
+        public async Task<User> Find(int id)
         {
-            throw new NotImplementedException();
+            await Task.Yield();
+            return this._users.FindById(id);
+        }
+
+        public async Task Update(User user)
+        {
+            await Task.Yield();
+            this._users.Update(user);
         }
     }
 }
