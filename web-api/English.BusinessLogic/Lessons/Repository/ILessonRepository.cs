@@ -4,7 +4,7 @@ namespace English.BusinessLogic
 {
     public interface ILessonRepository
     {
-        Task<Lesson> GetLessonWithMaxNumber();
+        Task<Lesson> GetLessonWithMaxNumber(int userId);
 
         Task<int> GetLessonCount();
 

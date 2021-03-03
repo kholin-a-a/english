@@ -8,10 +8,12 @@ namespace English.BusinessLogic.Services.Tests
     public class GetCurrentLessonServiceTests
     {
         private readonly Mock<ILessonRepository> _repoMock;
+        private readonly Mock<IUserContext> _userContextMock;
 
         public GetCurrentLessonServiceTests()
         {
             this._repoMock = new Mock<ILessonRepository>();
+            this._userContextMock = new Mock<IUserContext>();
         }
 
         [Fact]
@@ -27,17 +29,25 @@ namespace English.BusinessLogic.Services.Tests
         {
             // Setup
             var service = this.MakeService();
-
+            var userId = 11211;
             var lesson = new Lesson
             {
                 Id = 111,
-                Number = 222
+                Number = 222,
+                UserId = userId
             };
 
             this._repoMock.Setup(m =>
-                    m.GetLessonWithMaxNumber()
+                    m.GetLessonWithMaxNumber(
+                        It.Is<int>(id => id == userId)
+                        )
                 )
                 .ReturnsAsync(lesson);
+
+            this._userContextMock.Setup(m =>
+                    m.UserId
+                )
+                .Returns(userId);
 
             // Action
             var factLesson = await service.ExecuteAsync(
@@ -51,7 +61,8 @@ namespace English.BusinessLogic.Services.Tests
         private GetCurrentLessonService MakeService()
         {
             return new GetCurrentLessonService(
-                this._repoMock.Object
+                this._repoMock.Object,
+                this._userContextMock.Object
                 );
         }
     }
