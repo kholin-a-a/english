@@ -1,5 +1,4 @@
 ﻿using Moq;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -7,67 +6,87 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class StartLessonServiceTests
     {
-        private readonly Mock<ILessonRepository> _repoMock;
-        private readonly Mock<INextLessonNumberProvider> _nextNumberMock;
-        private readonly Mock<IUserContext> _userContextMock;
+        private readonly UserContextFake _userContextFake;
+        private readonly UserRepoFake _userRepoFake;
 
         public StartLessonServiceTests()
         {
-            this._repoMock = new Mock<ILessonRepository>();
-            this._nextNumberMock = new Mock<INextLessonNumberProvider>();
-            this._userContextMock = new Mock<IUserContext>();
+            this._userContextFake = new UserContextFake();
+            this._userRepoFake = new UserRepoFake();
         }
 
         [Fact]
-        public async Task ExecuteAsync_NullCommand_ThrowsException()
+        public async Task ExecuteAsync_Default_NoExceptions()
         {
-            var service = this.MakeService();
+            var service = new StartLessonService(
+                    this._userContextFake,
+                    this._userRepoFake
+                );
 
-            var ex = await Assert.ThrowsAsync<ArgumentNullException>(() => service.ExecuteAsync(null));
+            await service.ExecuteAsync(
+                new StartLessonCommand()
+                );
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_RepositoryMethodCalled()
+        public async Task ExecuteAsync_Default_FindMethodCalled()
         {
             // Setup
-            var service = this.MakeService();
-            var number = 12;
-            var userId = 1212;
+            var repoMock = new Mock<IUserRepository>();
 
-            this._nextNumberMock.Setup(m =>
-                    m.Get()
+            repoMock.Setup(m =>
+                   m.Find(It.IsAny<int>())
                 )
-                .ReturnsAsync(number);
+                .ReturnsAsync(new User());
 
-            this._userContextMock.Setup(m =>
-                    m.UserId
+            var service = new StartLessonService(
+                    this._userContextFake,
+                    repoMock.Object
+                );
+
+            // Action
+            await service.ExecuteAsync(
+                    new StartLessonCommand()
+                );
+
+            // Assert
+            repoMock.Verify(m =>
+                m.Find(
+                        It.Is<int>(id => id == this._userContextFake.UserId)
+                    )
+                );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_UpdateMethodCalled()
+        {
+            // Setup
+            var repoMock = new Mock<IUserRepository>();
+
+            var user = new User();
+
+            repoMock.Setup(m =>
+                   m.Find(It.IsAny<int>())
                 )
-                .Returns(userId);
+                .ReturnsAsync(user);
+
+            var service = new StartLessonService(
+                    this._userContextFake,
+                    repoMock.Object
+                );
 
             // Action
             await service.ExecuteAsync(
                 new StartLessonCommand()
                 );
 
-            // Assert
-            this._repoMock.Verify(m =>
-                    m.Add(
-                        It.Is<Lesson>(l =>
-                            l.Number == number
-                            &&
-                            l.UserId == userId
-                        )
+            repoMock.Verify(m =>
+                m.Update(
+                    It.Is<User>(u =>
+                        u.Lessons.Count == 1
                     )
-                );
-        }
-
-        private StartLessonService MakeService()
-        {
-            return new StartLessonService(
-                this._repoMock.Object,
-                this._nextNumberMock.Object,
-                this._userContextMock.Object
-                );
+                )
+            );
         }
     }
 }

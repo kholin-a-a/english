@@ -1,37 +1,30 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class StartLessonService : ICommandService<StartLessonCommand>
     {
-        private readonly ILessonRepository _repo;
-        private readonly INextLessonNumberProvider _nextNumber;
         private readonly IUserContext _userContext;
+        private readonly IUserRepository _userRepo;
 
         public StartLessonService(
-            ILessonRepository repo,
-            INextLessonNumberProvider nextNumber,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRepository userRepo
         )
         {
-            this._repo = repo;
-            this._nextNumber = nextNumber;
             this._userContext = userContext;
+            this._userRepo = userRepo;
         }
 
         public async Task ExecuteAsync(StartLessonCommand command)
         {
-            if (command == null)
-                throw new ArgumentNullException(nameof(command));
+            var user = await this._userRepo.Find(this._userContext.UserId);
 
-            var lesson = new Lesson()
-            {
-                Number = await this._nextNumber.Get(),
-                UserId = this._userContext.UserId
-            };
+            user.Lessons.Add(
+                new Lesson()
+                );
 
-            await this._repo.Add(lesson);
+            await this._userRepo.Update(user);
         }
     }
 }
