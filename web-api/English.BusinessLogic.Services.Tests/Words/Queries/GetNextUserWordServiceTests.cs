@@ -7,11 +7,13 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class GetNextUserWordServiceTests
     {
-        private readonly Mock<IWordRepository> _repoMock;
+        private readonly Mock<IUnlearnedWordRepository> _repoMock;
+        private readonly Mock<IUserContext> _userContextMock;
 
         public GetNextUserWordServiceTests()
         {
-            this._repoMock = new Mock<IWordRepository>();
+            this._repoMock = new Mock<IUnlearnedWordRepository>();
+            this._userContextMock = new Mock<IUserContext>();
         }
 
         [Fact]
@@ -28,6 +30,7 @@ namespace English.BusinessLogic.Services.Tests
             // Setup
             var service = this.MakeService();
             var query = new GetNextUserWordQuery();
+            var userId = 1232;
             var word = new Word
             {
                 Id = 123,
@@ -35,9 +38,14 @@ namespace English.BusinessLogic.Services.Tests
             };
 
             this._repoMock.Setup(m =>
-                    m.GetNextUserWord()
+                    m.GetNextUserWord(It.Is<int>(id => id == userId))
                 )
                 .ReturnsAsync(word);
+
+            this._userContextMock.Setup(m =>
+                    m.UserId
+                )
+                .Returns(userId);
 
             // Action
             var fact = await service.ExecuteAsync(query);
@@ -49,7 +57,8 @@ namespace English.BusinessLogic.Services.Tests
         private GetNextUserWordService MakeService()
         {
             return new GetNextUserWordService(
-                this._repoMock.Object
+                this._repoMock.Object,
+                this._userContextMock.Object
                 );
         }
     }

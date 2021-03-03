@@ -2,9 +2,9 @@
 
 namespace English.BusinessLogic
 {
-    public class WordRepository : IWordRepository
+    public class WordRepository : IUnlearnedWordRepository
     {
-        public Task<Word> GetNextUserWord()
+        public Task<Word> GetNextUserWord(int userId)
         {
             return Task.FromResult(new Word
             {

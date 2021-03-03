@@ -26,7 +26,7 @@ namespace English.WebApi.Entry
             services.AddScoped<IQueryService<GetNextUserWordQuery, Word>, GetNextUserWordService>();
 
             services.AddScoped<ILessonRepository, LessonRepository>();
-            services.AddScoped<IWordRepository, WordRepository>();
+            services.AddScoped<IUnlearnedWordRepository, WordRepository>();
             services.AddScoped<IWordDefinitionRepository, WordDefinitionRepository>();
             services.AddScoped<IUnknownWordRepository, UnknownWordRepository>();
             services.AddScoped<ICompletedWordRepository, CompletedWordRepository>();

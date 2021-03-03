@@ -5,11 +5,16 @@ namespace English.BusinessLogic.Services
 {
     public class GetNextUserWordService : IQueryService<GetNextUserWordQuery, Word>
     {
-        private readonly IWordRepository _repo;
+        private readonly IUnlearnedWordRepository _repo;
+        private readonly IUserContext _userContext;
 
-        public GetNextUserWordService(IWordRepository repo)
+        public GetNextUserWordService(
+            IUnlearnedWordRepository repo,
+            IUserContext userContext
+        )
         {
             this._repo = repo;
+            this._userContext = userContext;
         }
 
         public Task<Word> ExecuteAsync(GetNextUserWordQuery query)
@@ -17,7 +22,9 @@ namespace English.BusinessLogic.Services
             if (query == null)
                 throw new ArgumentNullException(nameof(query));
 
-            return this._repo.GetNextUserWord();
+            return this._repo.GetNextUserWord(
+                    this._userContext.UserId
+                );
         }
     }
 }
