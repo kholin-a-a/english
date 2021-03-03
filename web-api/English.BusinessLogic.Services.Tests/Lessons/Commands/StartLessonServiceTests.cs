@@ -9,11 +9,13 @@ namespace English.BusinessLogic.Services.Tests
     {
         private readonly Mock<ILessonRepository> _repoMock;
         private readonly Mock<INextLessonNumberProvider> _nextNumberMock;
+        private readonly Mock<IUserContext> _userContextMock;
 
         public StartLessonServiceTests()
         {
             this._repoMock = new Mock<ILessonRepository>();
             this._nextNumberMock = new Mock<INextLessonNumberProvider>();
+            this._userContextMock = new Mock<IUserContext>();
         }
 
         [Fact]
@@ -30,11 +32,17 @@ namespace English.BusinessLogic.Services.Tests
             // Setup
             var service = this.MakeService();
             var number = 12;
+            var userId = 1212;
 
             this._nextNumberMock.Setup(m =>
                     m.Get()
                 )
                 .ReturnsAsync(number);
+
+            this._userContextMock.Setup(m =>
+                    m.UserId
+                )
+                .Returns(userId);
 
             // Action
             await service.ExecuteAsync(
@@ -43,9 +51,13 @@ namespace English.BusinessLogic.Services.Tests
 
             // Assert
             this._repoMock.Verify(m =>
-                    m.Save(
-                            It.Is<Lesson>(l => l.Number == number)
+                    m.Add(
+                        It.Is<Lesson>(l =>
+                            l.Number == number
+                            &&
+                            l.UserId == userId
                         )
+                    )
                 );
         }
 
@@ -53,7 +65,8 @@ namespace English.BusinessLogic.Services.Tests
         {
             return new StartLessonService(
                 this._repoMock.Object,
-                this._nextNumberMock.Object
+                this._nextNumberMock.Object,
+                this._userContextMock.Object
                 );
         }
     }

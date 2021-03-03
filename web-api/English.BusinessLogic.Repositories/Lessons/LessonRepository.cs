@@ -4,6 +4,11 @@ namespace English.BusinessLogic.Repositories
 {
     public class LessonRepository : ILessonRepository
     {
+        public Task Add(Lesson lesson)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<int> GetLessonCount()
         {
             return Task.FromResult(10);
@@ -16,11 +21,6 @@ namespace English.BusinessLogic.Repositories
                 Id = 12,
                 Number = 123
             });
-        }
-
-        public Task Save(Lesson lesson)
-        {
-            return Task.CompletedTask;
         }
     }
 }

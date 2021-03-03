@@ -7,14 +7,17 @@ namespace English.BusinessLogic.Services
     {
         private readonly ILessonRepository _repo;
         private readonly INextLessonNumberProvider _nextNumber;
+        private readonly IUserContext _userContext;
 
         public StartLessonService(
             ILessonRepository repo,
-            INextLessonNumberProvider nextNumber
+            INextLessonNumberProvider nextNumber,
+            IUserContext userContext
         )
         {
             this._repo = repo;
             this._nextNumber = nextNumber;
+            this._userContext = userContext;
         }
 
         public async Task ExecuteAsync(StartLesson command)
@@ -24,10 +27,11 @@ namespace English.BusinessLogic.Services
 
             var lesson = new Lesson()
             {
-                Number = await this._nextNumber.Get()
+                Number = await this._nextNumber.Get(),
+                UserId = this._userContext.UserId
             };
 
-            await this._repo.Save(lesson);
+            await this._repo.Add(lesson);
         }
     }
 }
