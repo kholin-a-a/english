@@ -7,11 +7,13 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class MarkWordAsCompletedServiceTests
     {
-        private readonly Mock<ICompletedWordRepository> _completedWordRepo;
+        private readonly Mock<ICompletedWordRepository> _repoMock;
+        private readonly Mock<IUserContext> _userContextMock;
 
         public MarkWordAsCompletedServiceTests()
         {
-            this._completedWordRepo = new Mock<ICompletedWordRepository>();
+            this._repoMock = new Mock<ICompletedWordRepository>();
+            this._userContextMock = new Mock<IUserContext>();
         }
 
         [Fact]
@@ -27,7 +29,8 @@ namespace English.BusinessLogic.Services.Tests
         {
             // Setup
             var service = this.MakeService();
-            
+            var userId = 12221;
+
             var command = new MarkWordAsCompleted
             {
                 LessonId = 456,
@@ -35,11 +38,16 @@ namespace English.BusinessLogic.Services.Tests
                 WordId = 789
             };
 
+            this._userContextMock.Setup(m =>
+                    m.UserId
+                )
+                .Returns(userId);
+
             // Action
             await service.ExecuteAsync(command);
 
             // Assert
-            this._completedWordRepo.Verify(m =>
+            this._repoMock.Verify(m =>
                 m.Add(
                     It.Is<CompletedWord>(w =>
                         w.LessonId == command.LessonId
@@ -47,6 +55,8 @@ namespace English.BusinessLogic.Services.Tests
                         w.WordId == command.WordId
                         &&
                         w.Text == command.Text
+                        &&
+                        w.UserId == userId
                     )
                 )
             );
@@ -55,7 +65,8 @@ namespace English.BusinessLogic.Services.Tests
         private MarkWordAsCompletedService MakeService()
         {
             return new MarkWordAsCompletedService(
-                this._completedWordRepo.Object
+                this._repoMock.Object,
+                this._userContextMock.Object
                 );
         }
     }

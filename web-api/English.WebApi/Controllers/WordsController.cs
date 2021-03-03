@@ -9,12 +9,12 @@ namespace English.WebApi.Controllers
     {
         private readonly IQueryService<GetNextUserWordQuery, Word> _nextUserWordQuery;
         private readonly ICommandService<MarkWordAsUknown> _markWordAsUknownCommand;
-        private readonly ICommandService<MarkWordAsCompleted> _markWordAsCompletedCommand;
+        private readonly ICommandService<MarkWordAsCompletedCommand> _markWordAsCompletedCommand;
 
         public WordsController(
             IQueryService<GetNextUserWordQuery, Word> nextUserWordQuery,
             ICommandService<MarkWordAsUknown> markWordAsUknownCommand,
-            ICommandService<MarkWordAsCompleted> markWordAsCompletedCommand
+            ICommandService<MarkWordAsCompletedCommand> markWordAsCompletedCommand
         )
         {
             this._nextUserWordQuery = nextUserWordQuery;
@@ -54,7 +54,7 @@ namespace English.WebApi.Controllers
         [HttpPost("completed")]
         public async Task<ActionResult> MarkAsCompleted([FromBody]WordCompletedInputModel model)
         {
-            var command = new MarkWordAsCompleted()
+            var command = new MarkWordAsCompletedCommand()
             {
                 WordId = model.Id,
                 LessonId = model.LessonId,

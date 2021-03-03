@@ -12,13 +12,13 @@ namespace English.WebApi.Tests.Controllers
     {
         private readonly Mock<IQueryService<GetNextUserWordQuery, Word>> _nextUserWordQueryMock;
         private readonly Mock<ICommandService<MarkWordAsUknown>> _markWordAsUknownCommandMock;
-        private readonly Mock<ICommandService<MarkWordAsCompleted>> _markWordAsCompletedCommandMock;
+        private readonly Mock<ICommandService<MarkWordAsCompletedCommand>> _markWordAsCompletedCommandMock;
 
         public WordsControllerTests()
         {
             this._nextUserWordQueryMock = new Mock<IQueryService<GetNextUserWordQuery, Word>>();
             this._markWordAsUknownCommandMock = new Mock<ICommandService<MarkWordAsUknown>>();
-            this._markWordAsCompletedCommandMock = new Mock<ICommandService<MarkWordAsCompleted>>();
+            this._markWordAsCompletedCommandMock = new Mock<ICommandService<MarkWordAsCompletedCommand>>();
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace English.WebApi.Tests.Controllers
 
             this._markWordAsCompletedCommandMock.Verify(m =>
                 m.ExecuteAsync(
-                    It.Is<MarkWordAsCompleted>(c =>
+                    It.Is<MarkWordAsCompletedCommand>(c =>
                         c.WordId == wordId
                         &&
                         c.LessonId == lessonId

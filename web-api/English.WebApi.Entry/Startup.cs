@@ -17,7 +17,7 @@ namespace English.WebApi.Entry
             services.AddControllers();
 
             services.AddScoped<ICommandService<StartLessonCommand>, StartLessonService>();
-            services.AddScoped<ICommandService<MarkWordAsCompleted>, MarkWordAsCompletedService>();
+            services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
             services.AddScoped<ICommandService<MarkWordAsUknown>, MarkWordAsUknownService>();
 
             services.AddScoped<IQueryService<GetCurrentLessonQuery, Lesson>, GetCurrentLessonService>();

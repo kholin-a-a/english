@@ -1,6 +1,6 @@
 ﻿namespace English.BusinessLogic
 {
-    public class MarkWordAsCompleted
+    public class MarkWordAsCompletedCommand
     {
         public int WordId { get; set; }
 

@@ -5,11 +5,16 @@ namespace English.BusinessLogic.Services
 {
     public class MarkWordAsCompletedService : ICommandService<MarkWordAsCompleted>
     {
-        private readonly ICompletedWordRepository _completedWordRepo;
+        private readonly ICompletedWordRepository _repo;
+        private readonly IUserContext _userContext;
 
-        public MarkWordAsCompletedService(ICompletedWordRepository completedWordRepo)
+        public MarkWordAsCompletedService(
+            ICompletedWordRepository repo,
+            IUserContext userContext
+        )
         {
-            this._completedWordRepo = completedWordRepo;
+            this._repo = repo;
+            this._userContext = userContext;
         }
 
         public async Task ExecuteAsync(MarkWordAsCompleted command)
@@ -21,10 +26,11 @@ namespace English.BusinessLogic.Services
             {
                 LessonId = command.LessonId,
                 WordId = command.WordId,
-                Text = command.Text
+                Text = command.Text,
+                UserId = this._userContext.UserId
             };
 
-            await this._completedWordRepo.Add(word);
+            await this._repo.Add(word);
         }
     }
 }
