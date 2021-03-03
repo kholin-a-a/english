@@ -22,7 +22,7 @@ namespace English.WebApi.Entry
 
             services.AddScoped<IQueryService<GetCurrentLessonQuery, Lesson>, GetCurrentLessonService>();
             services.AddScoped<IQueryService<GetUserStatsQuery, UserStats>, GetUserStatsService>();
-            services.AddScoped<IQueryService<GetWordDefinitionsQuery, IEnumerable<WordDefinition>>, GetWordDefinitionsService>();
+            services.AddScoped<IQueryService<GetWordDefinitionsQuery, IEnumerable<Definition>>, GetWordDefinitionsService>();
             services.AddScoped<IQueryService<GetNextUserWordQuery, Word>, GetNextUserWordService>();
 
             services.AddScoped<ILessonRepository, LessonRepository>();

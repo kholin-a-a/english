@@ -1,5 +1,6 @@
 ﻿using Moq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -7,58 +8,107 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class GetNextUserWordServiceTests
     {
-        private readonly Mock<IUnlearnedWordRepository> _repoMock;
-        private readonly Mock<IUserContext> _userContextMock;
+        private readonly UserContextFake _userContextFake;
+        private readonly UserRepoFake _userRepoFake;
+        private readonly WordRepoFake _wordRepoFake;
 
         public GetNextUserWordServiceTests()
         {
-            this._repoMock = new Mock<IUnlearnedWordRepository>();
-            this._userContextMock = new Mock<IUserContext>();
+            this._userContextFake = new UserContextFake();
+            this._userRepoFake = new UserRepoFake();
+            this._wordRepoFake = new WordRepoFake();
         }
 
         [Fact]
-        public async Task ExecuteAsync_CommandNull_ThrowsException()
+        public async Task ExecuteAsync_Default_FindsUserInRepo()
         {
-            var service = this.MakeService();
+            // Setup
+            var repoMock = new Mock<IUserRepository>();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => service.ExecuteAsync(null));
+            repoMock.SetReturnsDefault(
+                Task.FromResult(new User())
+                );
+
+            var service = this.MakeService(userRepo: repoMock.Object);
+
+            // Action
+            await service.ExecuteAsync(
+                    new GetNextUserWordQuery()
+                );
+
+            // Assert
+            repoMock.Verify(m =>
+                    m.Find(It.Is<int>(id => id == this._userContextFake.UserId)
+                )
+            );
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_ReturnsNextWord()
+        public async Task ExecuteAsync_Default_QueryWordFromRepo()
+        {
+            // Setup
+            var repoMock = new Mock<IWordRepository>();
+
+            var unknownIds = new int[] { 1, 2, 3 };
+            var completedIds = new int[] { 4, 5, 6 };
+            var allIds = unknownIds.Concat(completedIds);
+
+            this._userRepoFake.User.UnknownWords = unknownIds
+                .Select(id => new Word { Id = id })
+                .ToList()
+                ;
+
+            var lesson = new Lesson();
+
+            lesson.Exercises = completedIds
+                .Select(id => new Exercise { Word = new Word { Id = id } })
+                .ToList()
+                ;
+
+            this._userRepoFake.User.Lessons.Add(lesson);
+
+            var service = this.MakeService(wordRepo: repoMock.Object);
+
+            // Action
+            await service.ExecuteAsync(
+                    new GetNextUserWordQuery()
+                );
+
+            // Assert
+            repoMock.Verify(m =>
+                m.Query(
+                        It.Is<int[]>(ids => ids.All(id => allIds.Contains(id))),
+                        It.Is<int>(take => take == 1)
+                    )
+                );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_ReturnsFirstWord()
         {
             // Setup
             var service = this.MakeService();
-            var query = new GetNextUserWordQuery();
-            var userId = 1232;
-            var word = new Word
-            {
-                Id = 123,
-                Text = "Test"
-            };
-
-            this._repoMock.Setup(m =>
-                    m.GetNextUserWord(It.Is<int>(id => id == userId))
-                )
-                .ReturnsAsync(word);
-
-            this._userContextMock.Setup(m =>
-                    m.UserId
-                )
-                .Returns(userId);
+            var first = this._wordRepoFake.Words.First();
 
             // Action
-            var fact = await service.ExecuteAsync(query);
+            var word = await service.ExecuteAsync(
+                    new GetNextUserWordQuery()
+                );
 
             // Assert
-            Assert.Equal(word, fact);
+            Assert.Equal(first, word);
         }
 
-        private GetNextUserWordService MakeService()
+        private GetNextUserWordService MakeService(
+            IUserContext context = null,
+            IUserRepository userRepo = null,
+            IWordRepository wordRepo = null
+        )
         {
             return new GetNextUserWordService(
-                this._repoMock.Object,
-                this._userContextMock.Object
+                    context ?? this._userContextFake,
+                    userRepo ?? this._userRepoFake,
+                    wordRepo ?? this._wordRepoFake
                 );
         }
     }

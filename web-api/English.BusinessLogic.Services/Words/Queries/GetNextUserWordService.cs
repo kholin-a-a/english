@@ -1,30 +1,43 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
     public class GetNextUserWordService : IQueryService<GetNextUserWordQuery, Word>
     {
-        private readonly IUnlearnedWordRepository _repo;
         private readonly IUserContext _userContext;
+        private readonly IUserRepository _userRepo;
+        private readonly IWordRepository _wordRepo;
 
         public GetNextUserWordService(
-            IUnlearnedWordRepository repo,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRepository userRepo,
+            IWordRepository wordRepo
         )
         {
-            this._repo = repo;
             this._userContext = userContext;
+            this._userRepo = userRepo;
+            this._wordRepo = wordRepo;
         }
 
-        public Task<Word> ExecuteAsync(GetNextUserWordQuery query)
+        public async Task<Word> ExecuteAsync(GetNextUserWordQuery query)
         {
-            if (query == null)
-                throw new ArgumentNullException(nameof(query));
-
-            return this._repo.GetNextUserWord(
+            var user = await this._userRepo.Find(
                     this._userContext.UserId
                 );
+
+            var filterWordIds = user.UnknownWords
+                .Select(w => w.Id)
+                .Concat(
+                    user.Lessons
+                        .SelectMany(l => l.Exercises)
+                        .Select(e => e.Word.Id)
+                )
+                .ToArray();
+
+            var words = await this._wordRepo.Query(filterWordIds, take: 1);
+
+            return words.SingleOrDefault();
         }
     }
 }
