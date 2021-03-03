@@ -34,10 +34,11 @@ namespace English.BusinessLogic.Services.Tests
             // Setup
             var repoMock = new Mock<IUserRepository>();
 
-            repoMock.Setup(m =>
-                   m.Find(It.IsAny<int>())
-                )
-                .ReturnsAsync(new User());
+            var user = new User();
+
+            repoMock.SetReturnsDefault(
+                    Task.FromResult(user)
+                );
 
             var service = new StartLessonService(
                     this._userContextFake,
@@ -63,12 +64,11 @@ namespace English.BusinessLogic.Services.Tests
             // Setup
             var repoMock = new Mock<IUserRepository>();
 
-            var user = new User();
+            var user = new User() { Id = 123 };
 
-            repoMock.Setup(m =>
-                   m.Find(It.IsAny<int>())
-                )
-                .ReturnsAsync(user);
+            repoMock.SetReturnsDefault(
+                    Task.FromResult(user)
+                );
 
             var service = new StartLessonService(
                     this._userContextFake,
@@ -83,6 +83,8 @@ namespace English.BusinessLogic.Services.Tests
             repoMock.Verify(m =>
                 m.Update(
                     It.Is<User>(u =>
+                        u.Id == user.Id
+                        &&
                         u.Lessons.Count == 1
                     )
                 )
