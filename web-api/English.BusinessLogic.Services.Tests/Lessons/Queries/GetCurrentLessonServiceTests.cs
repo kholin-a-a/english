@@ -7,16 +7,11 @@ namespace English.BusinessLogic.Services.Tests
 {
     public class GetCurrentLessonServiceTests
     {
-        private readonly Mock<ILessonRepository> _repoMock;
-        private readonly Mock<IUserContext> _userContextMock;
         private readonly UserContextFake _userContextFake;
         private readonly UserRepoFake _userRepoFake;
 
         public GetCurrentLessonServiceTests()
         {
-            this._repoMock = new Mock<ILessonRepository>();
-            this._userContextMock = new Mock<IUserContext>();
-
             this._userContextFake = new UserContextFake();
             this._userRepoFake = new UserRepoFake();
         }
@@ -24,10 +19,7 @@ namespace English.BusinessLogic.Services.Tests
         [Fact]
         public async Task ExecuteAsync_Default_NoExceptions()
         {
-            var service = new GetCurrentLessonService(
-                this._userContextFake,
-                this._userRepoFake
-                );
+            var service = this.MakeService();
 
             await service.ExecuteAsync(
                 new GetCurrentLessonQuery()
@@ -44,10 +36,7 @@ namespace English.BusinessLogic.Services.Tests
                 Task.FromResult(new User())
                 );
 
-            var service = new GetCurrentLessonService(
-                this._userContextFake,
-                repoMock.Object
-                );
+            var service = this.MakeService(repo: repoMock.Object);
 
             // Action
             await service.ExecuteAsync(
@@ -79,10 +68,7 @@ namespace English.BusinessLogic.Services.Tests
                 }
             };
 
-            var service = new GetCurrentLessonService(
-                this._userContextFake,
-                this._userRepoFake
-                );
+            var service = this.MakeService();
 
             // Action
             var lesson = await service.ExecuteAsync(
@@ -91,6 +77,17 @@ namespace English.BusinessLogic.Services.Tests
 
             // Assert
             Assert.Equal(last, lesson);
+        }
+
+        private GetCurrentLessonService MakeService(
+            IUserContext context = null,
+            IUserRepository repo = null
+        )
+        {
+            return new GetCurrentLessonService(
+                    context ?? this._userContextFake,
+                    repo ?? this._userRepoFake
+                );
         }
     }
 }
