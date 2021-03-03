@@ -1,9 +1,11 @@
 using English.BusinessLogic;
 using English.BusinessLogic.Repositories;
 using English.BusinessLogic.Services;
+using English.WebApi.Controllers;
 using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
@@ -15,7 +17,14 @@ namespace English.WebApi.Entry
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .PartManager
+                .ApplicationParts
+                .Add(
+                    new AssemblyPart(
+                        typeof(ApiControllerBase).Assembly
+                    )
+                );
 
             services.AddScoped<ICommandService<StartLessonCommand>, StartLessonService>();
             services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
