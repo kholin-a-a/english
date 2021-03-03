@@ -1,4 +1,5 @@
 using English.BusinessLogic;
+using English.BusinessLogic.Repositories;
 using English.BusinessLogic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,9 @@ namespace English.WebApi.Entry
             services.AddScoped<IQueryService<GetNextUserWordQuery, Word>, GetNextUserWordService>();
 
             services.AddScoped<IUserContext, UserContextStub>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWordRepository, WordRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
