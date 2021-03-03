@@ -9,7 +9,7 @@ namespace English.BusinessLogic.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<int> GetLessonCount()
+        public Task<int> GetLessonCount(int userId)
         {
             return Task.FromResult(10);
         }

@@ -6,7 +6,7 @@ namespace English.BusinessLogic
     {
         Task<Lesson> GetLessonWithMaxNumber(int userId);
 
-        Task<int> GetLessonCount();
+        Task<int> GetLessonCount(int userId);
 
         Task Add(Lesson lesson);
     }
