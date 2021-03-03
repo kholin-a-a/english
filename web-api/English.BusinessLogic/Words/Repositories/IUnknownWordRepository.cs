@@ -4,6 +4,6 @@ namespace English.BusinessLogic
 {
     public interface IUnknownWordRepository
     {
-        Task Save(UnknownWord word);
+        Task Add(UnknownWord word);
     }
 }

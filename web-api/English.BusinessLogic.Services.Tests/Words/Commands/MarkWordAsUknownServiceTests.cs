@@ -45,7 +45,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Assert
             this._repoMock.Verify(m =>
-                m.Save(
+                m.Add(
                     It.Is<UnknownWord>(w =>
                         w.WordId == command.WordId
                         &&

@@ -4,7 +4,7 @@ namespace English.BusinessLogic
 {
     public class UnknownWordRepository : IUnknownWordRepository
     {
-        public Task Save(UnknownWord word)
+        public Task Add(UnknownWord word)
         {
             return Task.CompletedTask;
         }

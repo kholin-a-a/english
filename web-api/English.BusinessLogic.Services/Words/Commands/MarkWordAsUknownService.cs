@@ -28,7 +28,7 @@ namespace English.BusinessLogic.Services
                 UserId = this._userContext.UserId
             };
 
-            await this._repo.Save(word);
+            await this._repo.Add(word);
         }
     }
 }
