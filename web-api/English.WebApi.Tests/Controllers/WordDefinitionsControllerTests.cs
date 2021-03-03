@@ -62,7 +62,6 @@ namespace English.WebApi.Tests.Controllers
                 {
                      SpeechPart = new SpeechPart
                      {
-                        Id = 1,
                         Name = speechPart
                      },
                      Definition = definition,
