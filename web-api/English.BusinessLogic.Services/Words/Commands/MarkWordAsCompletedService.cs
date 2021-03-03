@@ -24,7 +24,7 @@ namespace English.BusinessLogic.Services
                 Text = command.Text
             };
 
-            await this._completedWordRepo.Save(word);
+            await this._completedWordRepo.Add(word);
         }
     }
 }

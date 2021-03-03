@@ -40,7 +40,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Assert
             this._completedWordRepo.Verify(m =>
-                m.Save(
+                m.Add(
                     It.Is<CompletedWord>(w =>
                         w.LessonId == command.LessonId
                         &&

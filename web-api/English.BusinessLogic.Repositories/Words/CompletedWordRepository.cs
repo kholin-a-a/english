@@ -4,7 +4,7 @@ namespace English.BusinessLogic.Repositories
 {
     public class CompletedWordRepository : ICompletedWordRepository
     {
-        public Task Save(CompletedWord word)
+        public Task Add(CompletedWord word)
         {
             return Task.CompletedTask;
         }

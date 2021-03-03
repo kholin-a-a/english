@@ -4,6 +4,6 @@ namespace English.BusinessLogic
 {
     public interface ICompletedWordRepository
     {
-        Task Save(CompletedWord word);
+        Task Add(CompletedWord word);
     }
 }
