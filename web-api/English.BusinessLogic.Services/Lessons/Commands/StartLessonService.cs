@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
 {
-    public class StartLessonService : ICommandService<StartLesson>
+    public class StartLessonService : ICommandService<StartLessonCommand>
     {
         private readonly ILessonRepository _repo;
         private readonly INextLessonNumberProvider _nextNumber;
@@ -20,7 +20,7 @@ namespace English.BusinessLogic.Services
             this._userContext = userContext;
         }
 
-        public async Task ExecuteAsync(StartLesson command)
+        public async Task ExecuteAsync(StartLessonCommand command)
         {
             if (command == null)
                 throw new ArgumentNullException(nameof(command));

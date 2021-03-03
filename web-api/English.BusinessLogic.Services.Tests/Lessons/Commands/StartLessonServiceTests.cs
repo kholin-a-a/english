@@ -46,7 +46,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             await service.ExecuteAsync(
-                new StartLesson()
+                new StartLessonCommand()
                 );
 
             // Assert
