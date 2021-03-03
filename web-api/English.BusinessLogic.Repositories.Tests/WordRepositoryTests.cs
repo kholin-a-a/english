@@ -107,6 +107,33 @@ namespace English.BusinessLogic.Repositories.Tests
             Assert.Equal(words, fact);
         }
 
+
+        [Fact]
+        public async Task Add_Default_NoExceptions()
+        {
+            var repo = this.MakeRepository();
+            await repo.Add(new Word());
+        }
+
+        [Fact]
+        public async Task Add_Default_CallsInsert()
+        {
+            // Setup
+            var mock = new Mock<ILiteCollection<Word>>();
+            var repo = this.MakeRepository(words: mock.Object);
+            var word = new Word();
+
+            // Action
+            await repo.Add(word);
+
+            // Assert
+            mock.Verify(m =>
+                m.Insert(
+                    It.Is<Word>(w => w == word)
+                    )
+                );
+        }
+
         private WordRepository MakeRepository(
             ILiteCollection<Word> words = null
         )

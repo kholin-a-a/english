@@ -1,5 +1,4 @@
 ﻿using LiteDB;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +33,7 @@ namespace English.BusinessLogic.Repositories
         public async Task Add(Word word)
         {
             await Task.Yield();
-            throw new NotImplementedException();
+            this._words.Insert(word);
         }
     }
 }
