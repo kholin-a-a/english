@@ -7,11 +7,11 @@ namespace English.WebApi.Controllers
 {
     public class LessonsController : ApiControllerBase
     {
-        private readonly ICommandService<StartLesson> _startService;
+        private readonly ICommandService<StartLessonCommand> _startService;
         private readonly IQueryService<GetCurrentLesson, Lesson> _getService;
 
         public LessonsController(
-            ICommandService<StartLesson> startService,
+            ICommandService<StartLessonCommand> startService,
             IQueryService<GetCurrentLesson, Lesson> getService
         )
         {
@@ -23,7 +23,7 @@ namespace English.WebApi.Controllers
         public async Task<ActionResult<LessonOutputModel>> StartLesson()
         {
             await this._startService.ExecuteAsync(
-                new StartLesson()
+                new StartLessonCommand()
                 );
 
             var lesson = await this._getService.ExecuteAsync(

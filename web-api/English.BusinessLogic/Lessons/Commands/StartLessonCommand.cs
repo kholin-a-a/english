@@ -1,5 +1,5 @@
 ﻿namespace English.BusinessLogic
 {
-    public class StartLesson
+    public class StartLessonCommand
     { }
 }

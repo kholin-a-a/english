@@ -10,12 +10,12 @@ namespace English.WebApi.Tests.Controllers
 {
     public class LessonsControllerTests
     {
-        private readonly Mock<ICommandService<StartLesson>> _startLessonMock;
+        private readonly Mock<ICommandService<StartLessonCommand>> _startLessonMock;
         private readonly Mock<IQueryService<GetCurrentLesson, Lesson>> _getLessonMock;
 
         public LessonsControllerTests()
         {
-            this._startLessonMock = new Mock<ICommandService<StartLesson>>();
+            this._startLessonMock = new Mock<ICommandService<StartLessonCommand>>();
             this._getLessonMock = new Mock<IQueryService<GetCurrentLesson, Lesson>>();
         }
 
@@ -38,7 +38,7 @@ namespace English.WebApi.Tests.Controllers
 
             this._startLessonMock.Verify(m =>
                 m.ExecuteAsync(
-                    It.IsAny<StartLesson>()
+                    It.IsAny<StartLessonCommand>()
                     )
                 );
         }
