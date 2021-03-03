@@ -11,9 +11,6 @@ namespace English.BusinessLogic
 
         public int Id { get; set; }
 
-        // Depricated
-        public int Number { get; set; }
-
         public IList<Exercise> Exercises { get; set; }
     }
 }

@@ -51,8 +51,7 @@ namespace English.WebApi.Tests.Controllers
 
             var currentLesson = new Lesson()
             {
-                Id = 123,
-                Number = 456
+                Id = 123
             };
 
             this._getLessonMock.Setup(m =>
@@ -68,7 +67,6 @@ namespace English.WebApi.Tests.Controllers
             var lesson = Assert.IsType<LessonOutputModel>(okResult.Value);
 
             Assert.Equal(currentLesson.Id, lesson.Id);
-            Assert.Equal(currentLesson.Number, lesson.Number);
         }
 
         private LessonsController MakeConroller()

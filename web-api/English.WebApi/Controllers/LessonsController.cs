@@ -33,7 +33,7 @@ namespace English.WebApi.Controllers
             var result = new LessonOutputModel
             {
                 Id = lesson.Id,
-                Number = lesson.Number
+                Number = 0
             };
 
             return Ok(result);
