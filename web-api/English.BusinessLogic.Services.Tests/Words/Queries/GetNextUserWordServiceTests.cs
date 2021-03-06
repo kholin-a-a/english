@@ -53,17 +53,14 @@ namespace English.BusinessLogic.Services.Tests
             var completedIds = new int[] { 4, 5, 6 };
             var allIds = unknownIds.Concat(completedIds);
 
-            this._userRepoFake.User.UnknownWords = unknownIds
-                .Select(id => new Word { Id = id })
-                .ToList()
-                ;
-
             var lesson = new Lesson();
 
-            lesson.Exercises = completedIds
-                .Select(id => new Exercise { Word = new Word { Id = id } })
-                .ToList()
-                ;
+            lesson.Answers = completedIds
+                .Select(id => new Answer { Kind = AnswerKind.Completed, Word = new Word { Id = id } })
+                .Concat(
+                    unknownIds.Select(id => new Answer { Kind = AnswerKind.Unknown, Word = new Word { Id = id } })
+                )
+                .ToList();
 
             this._userRepoFake.User.Lessons.Add(lesson);
 
@@ -77,7 +74,7 @@ namespace English.BusinessLogic.Services.Tests
             // Assert
             repoMock.Verify(m =>
                 m.Query(
-                        It.Is<int[]>(ids => ids.All(id => allIds.Contains(id))),
+                        It.Is<int[]>(ids => allIds.Intersect(ids).Count() == allIds.Count()),
                         It.Is<int>(take => take == 1)
                     )
                 );

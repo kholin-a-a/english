@@ -26,14 +26,11 @@ namespace English.BusinessLogic.Services
                     this._userContext.UserId
                 );
 
-            var filterWordIds = user.UnknownWords
-                .Select(w => w.Id)
-                .Concat(
-                    user.Lessons
-                        .SelectMany(l => l.Exercises)
-                        .Select(e => e.Word.Id)
-                )
-                .ToArray();
+            var filterWordIds = user.Lessons
+                .SelectMany(w => w.Answers)
+                .Select(a => a.Word.Id)
+                .ToArray()
+                ;
 
             var words = await this._wordRepo.Query(filterWordIds, take: 1);
 
