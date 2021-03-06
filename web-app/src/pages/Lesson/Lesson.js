@@ -68,7 +68,7 @@ export function Lesson() {
     listener
       .stop()
       .then(() => wordDefinitions.hide())
-      .then(() => word.unknown())
+      .then(() => word.unknown(lesson.id))
       .then(() => word.next())
       .then(() => listener.start())
   }

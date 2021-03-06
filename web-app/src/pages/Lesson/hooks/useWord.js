@@ -18,11 +18,16 @@ export function useWord() {
       .then(() => setFetching(false))
   }
 
-  const unknown = () => {
+  const unknown = (lessonId) => {
     setFetching(true)
 
+    const model = {
+      id: id,
+      lessonId
+    }
+
     return WordHttpApi
-      .unknown(id)
+      .unknown(model)
       .then(() => setFetching(false))
   }
 

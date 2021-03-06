@@ -2,7 +2,7 @@
 {
     public class WordUnknownInputModel
     {
-        public int WordId { get; set; }
+        public int Id { get; set; }
 
         public int LessonId { get; set; }
     }

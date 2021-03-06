@@ -43,7 +43,7 @@ namespace English.WebApi.Controllers
         {
             var command = new MarkWordAsUknownCommand
             {
-                WordId = model.WordId,
+                WordId = model.Id,
                 LessonId = model.LessonId
             };
 

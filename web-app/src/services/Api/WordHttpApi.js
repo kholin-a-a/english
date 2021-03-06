@@ -5,8 +5,8 @@ export const WordHttpApi = {
     return Http.get("/words")
   },
 
-  unknown: (id) => {
-    return Http.post("/words/unknown", id)
+  unknown: (data) => {
+    return Http.post("/words/unknown", data)
   },
 
   complete: (data) => {

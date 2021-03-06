@@ -77,14 +77,14 @@ namespace English.WebApi.Tests.Controllers
             var controller = this.MakeController();
             var wordId = 109;
             var lessonId = 123;
-            var model = new WordUnknownInputModel { WordId = wordId, LessonId = lessonId };
+            var model = new WordUnknownInputModel { Id = wordId, LessonId = lessonId };
 
             await controller.MarkAsUnknown(model);
 
             this._markWordAsUknownCommandMock.Verify(m =>
                 m.ExecuteAsync(
                     It.Is<MarkWordAsUknownCommand>(c =>
-                        c.WordId == model.WordId
+                        c.WordId == model.Id
                         &&
                         c.LessonId == model.LessonId
                         )
