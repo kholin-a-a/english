@@ -1,5 +1,6 @@
 ﻿using Moq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -84,25 +85,42 @@ namespace English.BusinessLogic.Services.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_AddsToUknonwn()
+        public async Task ExecuteAsync_Default_AddsAnswer()
         {
             // Setup
-            var service = this.MakeService();
-            var user = this._userRepoFake.User;
-            var word = this._wordRepoFake.Word;
+            var lessonId = 123;
+            var wordId = 456;
 
-            // Action
-            await service.ExecuteAsync(
-                    new MarkWordAsUknownCommand()
+            var user = new User();
+            user.Lessons.Add(
+                    new Lesson { Id = lessonId }
                 );
 
+            this._userRepoFake.User = user;
+
+            var word = new Word { Id = wordId };
+
+            this._wordRepoFake.Word = word;
+
+            var service = this.MakeService();
+
+            var command = new MarkWordAsUknownCommand
+            {
+                WordId = wordId,
+                LessonId = lessonId,
+            };
+
+            // Action
+            await service.ExecuteAsync(command);
+
             // Assert
-            Assert.Collection(
-                user.UnknownWords,
-                w =>
-                {
-                    Assert.Equal(word, w);
-                });
+            Assert.Single(
+                user.Lessons.Single(l => l.Id == lessonId).Answers,
+                a =>
+                    a.Word == word
+                    &&
+                    a.Kind == AnswerKind.Unknown
+                );
         }
 
         [Fact]
@@ -112,6 +130,7 @@ namespace English.BusinessLogic.Services.Tests
             var repoMock = new Mock<IUserRepository>();
 
             var user = new User();
+            user.Lessons.Add(new Lesson());
 
             repoMock.SetReturnsDefault(
                     Task.FromResult(user)

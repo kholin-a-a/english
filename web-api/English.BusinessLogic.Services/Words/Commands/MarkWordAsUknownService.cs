@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Services
@@ -33,7 +34,21 @@ namespace English.BusinessLogic.Services
                     command.WordId
                 );
 
-            user.UnknownWords.Add(word);
+            var lesson = user.Lessons
+                .Where(l => l.Id == command.LessonId)
+                .SingleOrDefault()
+                ;
+
+            if (lesson == null)
+                return;
+
+            var answer = new Answer
+            {
+                Kind = AnswerKind.Unknown,
+                Word = word
+            };
+
+            lesson.Answers.Add(answer);
 
             await this._userRepo.Update(user);
         }
