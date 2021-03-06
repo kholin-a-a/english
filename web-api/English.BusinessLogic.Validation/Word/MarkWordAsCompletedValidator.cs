@@ -24,13 +24,13 @@ namespace English.BusinessLogic.Validation
         {
             var word = await this._wordRepo.Find(command.WordId);
             if (word == null)
-                throw new EntityNotFoundException($"Word with id {command.WordId} is not found");
+                throw new EntityNotFoundException($"Word is not found");
 
             var user = await this._userRepo.Find(this._userContext.UserId);
 
             var lessonExists = user.Lessons.Any(l => l.Id == command.LessonId);
             if (!lessonExists)
-                throw new EntityNotFoundException($"Lesson with id {command.LessonId} is not found");
+                throw new EntityNotFoundException($"Lesson is not found");
         }
     }
 }
