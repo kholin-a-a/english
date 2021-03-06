@@ -55,12 +55,9 @@ namespace English.WebApi.Controllers
         [HttpPost("completed")]
         public async Task<ActionResult> MarkAsCompleted([FromBody]WordCompletedInputModel model)
         {
-            var command = new MarkWordAsCompletedCommand()
-            {
-                WordId = model.Id,
-                LessonId = model.LessonId,
-                Text = model.Text
-            };
+            var command = new MarkWordAsCompletedCommand(
+                    model.Id, model.LessonId, model.Text
+                );
 
             await this._markWordAsCompletedCommand.ExecuteAsync(command);
 

@@ -25,7 +25,7 @@ namespace English.BusinessLogic.Services.Tests
             var service = this.MakeService();
 
             await service.ExecuteAsync(
-                new MarkWordAsCompletedCommand()
+                new MarkWordAsCompletedCommand(1, 2, "")
                 );
         }
 
@@ -53,7 +53,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             await service.ExecuteAsync(
-                    new MarkWordAsCompletedCommand()
+                    new MarkWordAsCompletedCommand(1, 2, "")
                 );
 
             // Assert
@@ -75,7 +75,7 @@ namespace English.BusinessLogic.Services.Tests
 
             var service = this.MakeService(wordRepo: repoMock.Object);
 
-            var command = new MarkWordAsCompletedCommand { WordId = 123 };
+            var command = new MarkWordAsCompletedCommand(123, 2, "");
 
             // Action
             await service.ExecuteAsync(command);
@@ -94,7 +94,12 @@ namespace English.BusinessLogic.Services.Tests
             var repoMock = new Mock<IUserRepository>();
 
             var user = new User();
-            user.Lessons.Add(new Lesson());
+
+            var lessonId = 123;
+
+            user.Lessons.Add(
+                new Lesson() { Id = lessonId }
+                );
 
             repoMock.SetReturnsDefault(
                     Task.FromResult(user)
@@ -104,7 +109,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             await service.ExecuteAsync(
-                    new MarkWordAsCompletedCommand()
+                    new MarkWordAsCompletedCommand(1, lessonId, "")
                 );
 
             // Assert
@@ -133,12 +138,7 @@ namespace English.BusinessLogic.Services.Tests
 
             var service = this.MakeService();
 
-            var command = new MarkWordAsCompletedCommand
-            {
-                WordId = wordId,
-                LessonId = lessonId,
-                Text = "Some text"
-            };
+            var command = new MarkWordAsCompletedCommand(wordId, lessonId, "Some text");
 
             // Action
             await service.ExecuteAsync(command);
