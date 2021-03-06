@@ -25,7 +25,7 @@ namespace English.BusinessLogic.Services.Tests
             var service = this.MakeService();
 
             await service.ExecuteAsync(
-                new MarkWordAsUknownCommand()
+                new MarkWordAsUknownCommand(1, 2)
                 );
         }
 
@@ -50,7 +50,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             await service.ExecuteAsync(
-                    new MarkWordAsUknownCommand()
+                    new MarkWordAsUknownCommand(1, 2)
                 );
 
             // Assert
@@ -72,7 +72,7 @@ namespace English.BusinessLogic.Services.Tests
 
             var service = this.MakeService(wordRepo: repoMock.Object);
 
-            var command = new MarkWordAsUknownCommand { WordId = 123 };
+            var command = new MarkWordAsUknownCommand(123, 12);
 
             // Action
             await service.ExecuteAsync(command);
@@ -104,11 +104,7 @@ namespace English.BusinessLogic.Services.Tests
 
             var service = this.MakeService();
 
-            var command = new MarkWordAsUknownCommand
-            {
-                WordId = wordId,
-                LessonId = lessonId,
-            };
+            var command = new MarkWordAsUknownCommand(wordId, lessonId);
 
             // Action
             await service.ExecuteAsync(command);
@@ -130,7 +126,12 @@ namespace English.BusinessLogic.Services.Tests
             var repoMock = new Mock<IUserRepository>();
 
             var user = new User();
-            user.Lessons.Add(new Lesson());
+
+            var lessonId = 232;
+
+            user.Lessons.Add(
+                    new Lesson() { Id = lessonId }
+                );
 
             repoMock.SetReturnsDefault(
                     Task.FromResult(user)
@@ -140,7 +141,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             await service.ExecuteAsync(
-                    new MarkWordAsUknownCommand()
+                    new MarkWordAsUknownCommand(1, lessonId)
                 );
 
             // Assert
