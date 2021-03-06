@@ -41,13 +41,14 @@ namespace English.BusinessLogic.Services
             if (lesson == null)
                 return;
 
-            var exersice = new Exercise
+            var answer = new Answer
             {
-                UserText = command.Text,
+                Kind = AnswerKind.Completed,
+                Text = command.Text,
                 Word = word
             };
 
-            lesson.Exercises.Add(exersice);
+            lesson.Answers.Add(answer);
 
             await this._userRepo.Update(user);
         }

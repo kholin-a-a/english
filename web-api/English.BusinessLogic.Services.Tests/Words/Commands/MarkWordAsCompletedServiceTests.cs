@@ -88,46 +88,6 @@ namespace English.BusinessLogic.Services.Tests
         }
 
         [Fact]
-        public async Task ExecuteAsync_Default_AddsExercise()
-        {
-            // Setup
-            var lessonId = 123;
-            var wordId = 456;
-
-            var user = new User();
-            user.Lessons.Add(
-                    new Lesson { Id = lessonId }
-                );
-
-            this._userRepoFake.User = user;
-
-            var word = new Word { Id = wordId };
-            
-            this._wordRepoFake.Word = word;
-
-            var service = this.MakeService();
-
-            var command = new MarkWordAsCompletedCommand
-            {
-                WordId = wordId,
-                LessonId = lessonId,
-                Text = "Some text"
-            };
-
-            // Action
-            await service.ExecuteAsync(command);
-
-            // Assert
-            Assert.Single(
-                user.Lessons.Single(l => l.Id == lessonId).Exercises,
-                e =>
-                    e.Word == word
-                    &&
-                    e.UserText == command.Text
-                );
-        }
-
-        [Fact]
         public async Task ExecuteAsync_Default_UpdateMethodCalled()
         {
             // Setup
@@ -150,6 +110,48 @@ namespace English.BusinessLogic.Services.Tests
             // Assert
             repoMock.Verify(m =>
                     m.Update(It.IsAny<User>())
+                );
+        }
+
+        [Fact]
+        public async Task ExecuteAsync_Default_AddsAnswer()
+        {
+            // Setup
+            var lessonId = 123;
+            var wordId = 456;
+
+            var user = new User();
+            user.Lessons.Add(
+                    new Lesson { Id = lessonId }
+                );
+
+            this._userRepoFake.User = user;
+
+            var word = new Word { Id = wordId };
+
+            this._wordRepoFake.Word = word;
+
+            var service = this.MakeService();
+
+            var command = new MarkWordAsCompletedCommand
+            {
+                WordId = wordId,
+                LessonId = lessonId,
+                Text = "Some text"
+            };
+
+            // Action
+            await service.ExecuteAsync(command);
+
+            // Assert
+            Assert.Single(
+                user.Lessons.Single(l => l.Id == lessonId).Answers,
+                a =>
+                    a.Word == word
+                    &&
+                    a.Text == command.Text
+                    &&
+                    a.Kind == AnswerKind.Completed
                 );
         }
 
