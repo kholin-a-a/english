@@ -28,17 +28,7 @@ namespace English.WebApi.Entry
                 );
 
             services.AddScoped<ICommandService<StartLessonCommand>, StartLessonService>();
-            //services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
-            services.AddScoped<MarkWordAsCompletedService, MarkWordAsCompletedService>();
-
-            services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedValidator>(sp =>
-                new MarkWordAsCompletedValidator(
-                    sp.GetRequiredService<MarkWordAsCompletedService>(),
-                    sp.GetRequiredService<IUserRepository>(),
-                    sp.GetRequiredService<IWordRepository>(),
-                    sp.GetRequiredService<IUserContext>()
-                    )
-                );
+            services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
 
             services.AddScoped<ICommandService<MarkWordAsUknownCommand>, MarkWordAsUknownService>();
 
