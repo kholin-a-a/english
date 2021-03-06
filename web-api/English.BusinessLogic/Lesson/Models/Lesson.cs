@@ -7,10 +7,13 @@ namespace English.BusinessLogic
         public Lesson()
         {
             this.Exercises = new List<Exercise>();
+            this.Answers = new List<Answer>();
         }
 
         public int Id { get; set; }
 
         public IList<Exercise> Exercises { get; set; }
+
+        public IList<Answer> Answers { get; set; }
     }
 }
