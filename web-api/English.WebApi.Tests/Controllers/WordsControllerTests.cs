@@ -64,7 +64,9 @@ namespace English.WebApi.Tests.Controllers
         {
             var controller = this.MakeController();
 
-            var actionResult = await controller.MarkAsUnknown(1);
+            var actionResult = await controller.MarkAsUnknown(
+                new WordUnknownInputModel()
+                );
 
             Assert.IsType<OkResult>(actionResult);
         }
@@ -74,13 +76,17 @@ namespace English.WebApi.Tests.Controllers
         {
             var controller = this.MakeController();
             var wordId = 109;
+            var lessonId = 123;
+            var model = new WordUnknownInputModel { WordId = wordId, LessonId = lessonId };
 
-            await controller.MarkAsUnknown(wordId);
+            await controller.MarkAsUnknown(model);
 
             this._markWordAsUknownCommandMock.Verify(m =>
                 m.ExecuteAsync(
                     It.Is<MarkWordAsUknownCommand>(c =>
-                        c.WordId == wordId
+                        c.WordId == model.WordId
+                        &&
+                        c.LessonId == model.LessonId
                         )
                     )
                 );

@@ -39,11 +39,12 @@ namespace English.WebApi.Controllers
         }
 
         [HttpPost("unknown")]
-        public async Task<ActionResult> MarkAsUnknown([FromBody]int id)
+        public async Task<ActionResult> MarkAsUnknown([FromBody]WordUnknownInputModel model)
         {
             var command = new MarkWordAsUknownCommand
             {
-                WordId = id
+                WordId = model.WordId,
+                LessonId = model.LessonId
             };
 
             await this._markWordAsUknownCommand.ExecuteAsync(command);
