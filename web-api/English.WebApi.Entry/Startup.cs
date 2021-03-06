@@ -48,6 +48,8 @@ namespace English.WebApi.Entry
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            BsonMapper.Global.Entity<Answer>().DbRef(a => a.Word);
+
             // Add default user
             using (var scope = app.ApplicationServices.CreateScope())
             {
