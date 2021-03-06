@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\English.BusinessLogic.Repositories\English.BusinessLogic.Repositories.csproj" />
     <ProjectReference Include="..\English.BusinessLogic.Services\English.BusinessLogic.Services.csproj" />
+    <ProjectReference Include="..\English.BusinessLogic.Validation\English.BusinessLogic.Validation.csproj" />
     <ProjectReference Include="..\English.BusinessLogic\English.BusinessLogic.csproj" />
     <ProjectReference Include="..\English.WebApi\English.WebApi.csproj" />
   </ItemGroup>
