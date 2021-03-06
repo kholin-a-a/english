@@ -23,10 +23,8 @@ namespace English.WebApi.Controllers
         public async Task<ActionResult<List<WordDefinitionOutputModel>>> GetDefinitions(int wordId)
         {
             var definitions = await this._definitionsQuery.ExecuteAsync(
-                new GetWordDefinitionsQuery()
-                {
-                    WordId = wordId
-                });
+                    new GetWordDefinitionsQuery(wordId)
+                );
 
             var result = definitions.Select(d =>
                 new WordDefinitionOutputModel

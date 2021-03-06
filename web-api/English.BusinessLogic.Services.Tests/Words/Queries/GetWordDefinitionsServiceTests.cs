@@ -33,7 +33,7 @@ namespace English.BusinessLogic.Services.Tests
 
             var service = this.MakeService(repo: repoMock.Object);
 
-            var query = new GetWordDefinitionsQuery { WordId = 123 };
+            var query = new GetWordDefinitionsQuery(123);
 
             // Action
             await service.ExecuteAsync(query);
@@ -58,7 +58,7 @@ namespace English.BusinessLogic.Services.Tests
 
             // Action
             var definitions = await service.ExecuteAsync(
-                new GetWordDefinitionsQuery()
+                new GetWordDefinitionsQuery(1)
                 );
 
             // Assert
