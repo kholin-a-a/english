@@ -5,19 +5,16 @@ namespace English.BusinessLogic.Validation
 {
     public class MarkWordAsCompletedValidator : ICommandValidator<MarkWordAsCompletedCommand>
     {
-        private readonly ICommandService<MarkWordAsCompletedCommand> _decoratee;
         private readonly IUserRepository _userRepo;
         private readonly IWordRepository _wordRepo;
         private readonly IUserContext _userContext;
 
         public MarkWordAsCompletedValidator(
-            ICommandService<MarkWordAsCompletedCommand> decoratee,
             IUserRepository userRepo,
             IWordRepository wordRepo,
             IUserContext userContext
         )
         {
-            this._decoratee = decoratee;
             this._userRepo = userRepo;
             this._wordRepo = wordRepo;
             this._userContext = userContext;
@@ -34,8 +31,6 @@ namespace English.BusinessLogic.Validation
             var lessonExists = user.Lessons.Any(l => l.Id == command.LessonId);
             if (!lessonExists)
                 throw new EntityNotFoundException($"Lesson with id {command.LessonId} is not found");
-
-            await this._decoratee.ExecuteAsync(command);
         }
     }
 }
