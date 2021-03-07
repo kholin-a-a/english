@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Moq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace English.BusinessLogic.Validation.Tests
@@ -6,79 +7,80 @@ namespace English.BusinessLogic.Validation.Tests
     public class MarkWordAsCompletedValidatorTests
     {
         private readonly UserContextFake _userContextFake;
-        private readonly UserRepoFake _userRepoFake;
-        private readonly WordRepoFake _wordRepoFake;
+        private readonly WordRulesFake _wordRulesFake;
+        private readonly UserRulesFake _userRulesFake;
 
         public MarkWordAsCompletedValidatorTests()
         {
             this._userContextFake = new UserContextFake();
-            this._wordRepoFake = new WordRepoFake();
-            this._userRepoFake = new UserRepoFake();
+            this._wordRulesFake = new WordRulesFake();
+            this._userRulesFake = new UserRulesFake();
         }
 
         [Fact]
-        public async Task Validate_Valid_NoExceptions()
+        public async Task Validate_Default_NoExceptions()
+        {
+            var validator = this.MakeValidator();
+            var command = new MarkWordAsCompletedCommand(1, 2, "");
+
+            await validator.Validate(command);
+        }
+
+        [Fact]
+        public async Task Validate_Default_EnsuresWordExists()
         {
             // Setup
-            var lessonId = 123;
-            var wordId = 456;
+            var wordRulesMock = new Mock<IWordRules>();
 
-            this._userRepoFake.User.Lessons.Add(
-                new Lesson { Id = lessonId }
+            var validator = this.MakeValidator(
+                wordRules: wordRulesMock.Object
                 );
 
-            this._wordRepoFake.Word = new Word { Id = wordId };
-
-            var validator = this.MakeValidator();
+            var command = new MarkWordAsCompletedCommand(1, 2, "");
 
             // Action
-            await validator.Validate(
-                new MarkWordAsCompletedCommand(wordId, lessonId, "")
+            await validator.Validate(command);
+
+            // Assert
+            wordRulesMock.Verify(m =>
+                    m.WordExists(It.Is<int>(id => id == command.WordId))
                 );
         }
 
         [Fact]
-        public async Task Validate_WordIsNull_ThrowsNotFoundException()
+        public async Task Validate_Default_EnsuresLessonExists()
         {
-            this._wordRepoFake.Word = null;
-            var validator = this.MakeValidator();
+            // Setup
+            var userRulesMock = new Mock<IUserRules>();
 
-            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
-            {
-                await validator.Validate(
-                    new MarkWordAsCompletedCommand(1, 2, "")
+            var validator = this.MakeValidator(
+                userRules: userRulesMock.Object
                 );
-            });
 
-            Assert.Contains("Word is not found", ex.Message);
-        }
+            var command = new MarkWordAsCompletedCommand(1, 2, "");
 
-        [Fact]
-        public async Task Validate_NoLesson_ThrowsNotFoundException()
-        {
-            this._userRepoFake.User.Lessons.Clear();
-            var validator = this.MakeValidator();
+            // Action
+            await validator.Validate(command);
 
-            var ex = await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
-            {
-                await validator.Validate(
-                    new MarkWordAsCompletedCommand(1, 2, "")
+            // Assert
+            userRulesMock.Verify(m =>
+                    m.HasLesson(
+                        It.Is<int>(id => id == this._userContextFake.UserId),
+                        It.Is<int>(id => id == command.LessonId)
+                        )
                 );
-            });
-
-            Assert.Contains("Lesson is not found", ex.Message);
         }
 
         private MarkWordAsCompletedValidator MakeValidator(
-            IUserRepository userRepo = null,
-            IWordRepository wordRepo = null,
-            IUserContext userContext = null
+            IUserContext userContext = null,
+            IWordRules wordRules = null,
+            IUserRules userRules = null
         )
         {
             return new MarkWordAsCompletedValidator(
-                userRepo ?? this._userRepoFake,
-                wordRepo ?? this._wordRepoFake,
-                userContext ?? this._userContextFake
+                userContext ?? this._userContextFake,
+                userRules ?? this._userRulesFake,
+                wordRules ?? this._wordRulesFake
                 );
         }
     }

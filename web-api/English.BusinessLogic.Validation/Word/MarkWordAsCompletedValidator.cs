@@ -1,36 +1,28 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace English.BusinessLogic.Validation
 {
     public class MarkWordAsCompletedValidator : ICommandValidator<MarkWordAsCompletedCommand>
     {
-        private readonly IUserRepository _userRepo;
-        private readonly IWordRepository _wordRepo;
         private readonly IUserContext _userContext;
+        private readonly IUserRules _userRules;
+        private readonly IWordRules _wordRules;
 
         public MarkWordAsCompletedValidator(
-            IUserRepository userRepo,
-            IWordRepository wordRepo,
-            IUserContext userContext
+            IUserContext userContext,
+            IUserRules userRules,
+            IWordRules wordRules
         )
         {
-            this._userRepo = userRepo;
-            this._wordRepo = wordRepo;
             this._userContext = userContext;
+            this._userRules = userRules;
+            this._wordRules = wordRules;
         }
 
         public async Task Validate(MarkWordAsCompletedCommand command)
         {
-            var word = await this._wordRepo.Find(command.WordId);
-            if (word == null)
-                throw new EntityNotFoundException($"Word is not found");
-
-            var user = await this._userRepo.Find(this._userContext.UserId);
-
-            var lessonExists = user.Lessons.Any(l => l.Id == command.LessonId);
-            if (!lessonExists)
-                throw new EntityNotFoundException($"Lesson is not found");
+            await this._wordRules.WordExists(command.WordId);
+            await this._userRules.HasLesson(this._userContext.UserId, command.LessonId);
         }
     }
 }
