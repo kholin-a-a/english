@@ -28,9 +28,6 @@ namespace English.WebApi.Entry
                 );
 
             services.AddScoped<ICommandService<StartLessonCommand>, StartLessonService>();
-
-            //services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
-            //services.AddScoped<ICommandService<MarkWordAsUknownCommand>, MarkWordAsUknownService>();
             
             services.AddScoped<MarkWordAsCompletedService, MarkWordAsCompletedService>();
             services.AddScoped<MarkWordAsCompletedValidator, MarkWordAsCompletedValidator>();
