@@ -1,4 +1,5 @@
 ﻿using English.BusinessLogic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace English.WebApi
@@ -8,10 +9,14 @@ namespace English.WebApi
         public void OnException(ExceptionContext context)
         {
             if (!(context.Exception is BusinessLogicException))
+            {
                 return;
+            }
 
-            // Bussiness logic exception!
-            int b = 0;
+            if (context.Exception is EntityNotFoundException)
+            {
+                context.Result = new NotFoundObjectResult(context.Exception.Message);
+            }
         }
     }
 }
