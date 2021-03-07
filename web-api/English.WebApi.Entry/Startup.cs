@@ -28,9 +28,30 @@ namespace English.WebApi.Entry
                 );
 
             services.AddScoped<ICommandService<StartLessonCommand>, StartLessonService>();
-            services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
 
-            services.AddScoped<ICommandService<MarkWordAsUknownCommand>, MarkWordAsUknownService>();
+            //services.AddScoped<ICommandService<MarkWordAsCompletedCommand>, MarkWordAsCompletedService>();
+            //services.AddScoped<ICommandService<MarkWordAsUknownCommand>, MarkWordAsUknownService>();
+            
+            services.AddScoped<MarkWordAsCompletedService, MarkWordAsCompletedService>();
+            services.AddScoped<MarkWordAsCompletedValidator, MarkWordAsCompletedValidator>();
+            services.AddScoped<ICommandService<MarkWordAsCompletedCommand>>(sp =>
+                new ValidatableCommand<MarkWordAsCompletedCommand>(
+                    sp.GetRequiredService<MarkWordAsCompletedService>(),
+                    sp.GetRequiredService<MarkWordAsCompletedValidator>()
+                    )
+                );
+
+            services.AddScoped<MarkWordAsUknownService, MarkWordAsUknownService>();
+            services.AddScoped<MarkWordAsUknownValidator, MarkWordAsUknownValidator>();
+            services.AddScoped<ICommandService<MarkWordAsUknownCommand>>(sp =>
+                new ValidatableCommand<MarkWordAsUknownCommand>(
+                    sp.GetRequiredService<MarkWordAsUknownService>(),
+                    sp.GetRequiredService<MarkWordAsUknownValidator>()
+                    )
+                );
+
+            services.AddScoped<IUserRules, UserRules>();
+            services.AddScoped<IWordRules, WordRules>();
 
             services.AddScoped<IQueryService<GetCurrentLessonQuery, Lesson>, GetCurrentLessonService>();
             services.AddScoped<IQueryService<GetUserStatsQuery, UserStats>, GetUserStatsService>();
